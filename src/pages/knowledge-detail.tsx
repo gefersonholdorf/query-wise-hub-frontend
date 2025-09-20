@@ -8,11 +8,11 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { CreateKnowledgeComponent } from "@/context/create-knowledge/components/main";
-import { Plus } from "lucide-react";
+import { KnowledgeDetailComponent } from "@/context/knowledge-detail/main";
+import { Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export function CreateKnowledgePage() {
+export function KnowledgeDetailPage() {
     return (
         <main className="h-full flex flex-col gap-2">
             <Breadcrumb className="text-[0.6rem]">
@@ -24,18 +24,18 @@ export function CreateKnowledgePage() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Novo Conhecimento</BreadcrumbPage>
+                        <BreadcrumbPage>Visualizar/Editar Conhecimento</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
             <PageHeader
-                title="Novo Conhecimento"
-                description="Cadastre um novo item na base de conhecimento."
-                icon={<Plus size={15} />}
+                title="Visualizar/Editar Conhecimento"
+                description="Aqui você pode visualizar ou atualizar os detalhes do conhecimento selecionado."
+                icon={<Pencil size={15} />}
             />
 
             <div className="flex-1 w-full flex items-center">
-                <CreateKnowledgeComponent />
+                <KnowledgeDetailComponent />
             </div>
         </main>
     );

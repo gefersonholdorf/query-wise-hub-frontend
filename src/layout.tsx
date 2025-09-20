@@ -1,4 +1,4 @@
-import { BookOpen, ChevronLeft, ClipboardList, Cog, House, LayoutDashboard, LogOut, Menu, Newspaper, Plus, Users, Users2 } from "lucide-react";
+import { BookOpen, ChevronLeft, ClipboardList, Cog, LogOut, Menu, Plus, Users2 } from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { NavComponent } from "./components/nav/nav-component";
@@ -42,7 +42,7 @@ export function Layout() {
 
                 <nav className="flex flex-col gap-1 w-full p-2">
                     <span className="text-sm text-gray-600 font-semibold p-2">MÓDULOS PRINCIPAIS</span>
-                    <Link to="/knowledge"><NavComponent active={location.pathname === '/knowledge' ? 'select' : 'default'} title="Base de Conhecimento" icon={<BookOpen size={15} />} /></Link>
+                    <Link to="/knowledge"><NavComponent active={location.pathname.startsWith('/knowledge') ? 'select' : 'default'} title="Base de Conhecimento" icon={<BookOpen size={15} />} /></Link>
                     <Link to="/create-knowledge"><NavComponent active={location.pathname === '/create-knowledge' ? 'select' : 'default'} title="Novo Conhecimento" icon={<Plus size={15} />} /></Link>
                     <Link to="/request-analysis"><NavComponent active={location.pathname === '/request-analysis' ? 'select' : 'default'} title="Análise de Solicitações" icon={<ClipboardList size={15} />} /></Link>
                 </nav>

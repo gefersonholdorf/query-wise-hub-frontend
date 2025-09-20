@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export interface CreateKnowledgeRequest {
     problem: string
@@ -36,6 +37,15 @@ export function useCreateKnowledge() {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["knowledge"] })
+
+            toast.success("Conhecimento criado com sucesso!", {
+                position: 'top-center'
+            })
+        },
+        onError: () => {
+            toast.error("Erro ao criar conhecimento!", {
+                position: 'top-center'
+            })
         }
     })
 }

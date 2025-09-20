@@ -22,6 +22,6 @@ export function PageHeader({ icon, title, description, children }: PageHeaderPro
             <div className="flex gap-2 items-center">
                 {children}
             </div>
-        </header>
+        </header >
     )
 }

@@ -36,7 +36,7 @@ export function DataList() {
 
     const items = data?.pages.flatMap((page) =>
         page.data.map((item) => (
-            <Knowledge.Card key={item.id} problem={item.payload.problem} soluction={item.payload.solution} createdAt={new Date()} createdBy="Gefe" status={true} updatedAt={new Date()} />
+            <Knowledge.Card key={item.id} id={item.id} problem={item.payload.problem} soluction={item.payload.solution} createdAt={new Date()} createdBy="Gefe" status={true} updatedAt={new Date()} />
         ))
     );
 

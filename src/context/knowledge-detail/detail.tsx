@@ -12,9 +12,10 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { useCreateKnowledge } from "../http/use-create-knowledge";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { useCreateKnowledge } from "@/context/create-knowledge/http/use-create-knowledge";
+import type { Knowledge } from "@/models/knowledge";
 
 export const createKnowledgeSchema = z.object({
     problem: z.string().min(6, "O problema deve conter no mínimo 6 caracteres."),
@@ -24,13 +25,18 @@ export const createKnowledgeSchema = z.object({
 
 export type CreateKnowledgeSchema = z.infer<typeof createKnowledgeSchema>
 
-export function Form() {
+export interface KnowledgeDetailProps {
+    isAction: 'edit' | 'create'
+    knowledge: Knowledge | null
+}
+
+export function Detail({ isAction, knowledge }: KnowledgeDetailProps) {
     const form = useForm<CreateKnowledgeSchema>({
         resolver: zodResolver(createKnowledgeSchema),
         defaultValues: {
-            problem: '',
-            solution: '',
-            status: true,
+            problem: isAction === 'edit' && knowledge ? knowledge.payload.problem : '',
+            solution: isAction === 'edit' && knowledge ? knowledge.payload.solution : '',
+            status: isAction === 'edit' && knowledge ? knowledge.payload.status : true,
         }
     })
 
