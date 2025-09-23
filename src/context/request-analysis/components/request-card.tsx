@@ -1,10 +1,11 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <"explanation"> */
+/** biome-ignore-all assist/source/organizeImports: <"explanation"> */
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { truncatedText } from '@/helpers/truncate-text';
 import dayjs from 'dayjs';
-import { Calendar, Check, Edit, Eye, MessageSquare, Tag, User, View, X } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { Calendar, Check, Edit, Eye, MessageSquare, Tag, User, X } from 'lucide-react';
+import { RequestDialogComponent } from './dialog/main';
 
 dayjs.locale('pt-br');
 
@@ -17,9 +18,7 @@ export interface CardProps {
     status: 'PENDING' | 'APPROVED' | 'DENIED'
 }
 
-export function RequestCard({ id, problems, solution, createdBy, createdAt, status }: CardProps) {
-    const navigate = useNavigate()
-
+export function RequestCard({ problems, solution, createdBy, createdAt, status }: CardProps) {
     return (
         <div className="group flex flex-col gap-4 bg-white rounded-xl transition-all duration-300 transform hover:scale-[1.00] hover:shadow-lg shadow p-4 border-2 hover:border-blue-300">
             <div className='flex items-center justify-between'>
@@ -31,9 +30,11 @@ export function RequestCard({ id, problems, solution, createdBy, createdAt, stat
 
                     <Tooltip>
                         <TooltipTrigger>
-                            <div className='hover:bg-blue-50 hover:text-blue-700 p-2 rounded-sm'>
-                                <Eye size={20} />
-                            </div>
+                            <RequestDialogComponent action='view'>
+                                <div className='hover:bg-blue-50 hover:text-blue-700 p-2 rounded-sm'>
+                                    <Eye size={20} />
+                                </div>
+                            </RequestDialogComponent>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>Visualizar Solicitação</p>
@@ -41,12 +42,13 @@ export function RequestCard({ id, problems, solution, createdBy, createdAt, stat
                     </Tooltip>
                     {status === 'PENDING' && (
                         <>
-
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <div className='hover:bg-purple-50 hover:text-purple-500 p-2 rounded-sm'>
-                                        <Edit size={20} />
-                                    </div>
+                                    <RequestDialogComponent action='edit'>
+                                        <div className='hover:bg-blue-50 hover:text-blue-700 p-2 rounded-sm'>
+                                            <Edit size={20} />
+                                        </div>
+                                    </RequestDialogComponent>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Editar Solicitação</p>
@@ -84,9 +86,12 @@ export function RequestCard({ id, problems, solution, createdBy, createdAt, stat
                     {truncatedText({ text: problems[0], max: 80 })}
                 </h3>
                 {problems.length > 1 && (
-                    <span className='cursor-pointer text-blue-600 hover:bg-gray-50 hover:text-blue-700 text-sm'>
-                        Ver todos os {problems.length} problemas.
-                    </span>
+                    <RequestDialogComponent action='view'>
+                        <span className='cursor-pointer text-blue-600 hover:bg-gray-50 hover:text-blue-700 text-sm'>
+                            Ver todos os {problems.length} problemas.
+                        </span>
+                    </RequestDialogComponent>
+
                 )}
             </div>
 

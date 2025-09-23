@@ -8,9 +8,8 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { CreateKnowledgeComponent } from "@/context/create-knowledge/components/main";
 import { RequestAnalysisComponent } from "@/context/request-analysis/components/main";
-import { ClipboardList, Plus } from "lucide-react";
+import { ClipboardList } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export function RequestAnalysisPage() {
