@@ -5,6 +5,7 @@ import { Layout } from "./layout";
 import { CreateKnowledgePage } from "./pages/create-knowledge";
 import { KnowledgePage } from "./pages/knowledge";
 import { KnowledgeDetailPage } from "./pages/knowledge-detail";
+import { RequestAnalysisPage } from "./pages/request-analysis";
 
 const queryClient = new QueryClient()
 
@@ -17,6 +18,7 @@ export function App() {
             <Route path="/knowledge" element={<KnowledgePage />} />
             <Route path="/create-knowledge" element={<CreateKnowledgePage />} />
             <Route path="/knowledge/:id" element={<KnowledgeDetailPage />} />
+            <Route path="/request-analysis" element={<RequestAnalysisPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

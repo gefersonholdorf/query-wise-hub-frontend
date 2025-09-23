@@ -24,7 +24,7 @@ export function KnowledgePage() {
                     </BreadcrumbList>
                 </Breadcrumb>
             </div>
-            <PageHeader title="Base de Conhecimento" description="Gerencie todos os conhecimentos do sistema" icon={<BookOpen size={15} />}>
+            <PageHeader title="Base de Conhecimento" description="Gerencie todos os conhecimentos do sistema." icon={<BookOpen size={15} />}>
                 <Button onClick={() => navigate('/create-knowledge')} className="bg-blue-500 hover:bg-blue-400"><Plus /> Novo Conhecimento</Button>
             </PageHeader>
             <KnowledgeComponent />
