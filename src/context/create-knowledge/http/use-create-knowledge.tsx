@@ -2,9 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export interface CreateKnowledgeRequest {
-    problem: string
+    problems: string[]
     solution: string
-    status: boolean
+    tags: string | null
+    isActive: boolean
 }
 
 export interface CreateKnowledgeResponse {

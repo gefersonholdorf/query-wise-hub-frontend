@@ -39,7 +39,8 @@ export interface Problem {
 export const createKnowledgeSchema = z.object({
     problems: z.array(z.string().min(6, "O problema deve conter no mínimo 6 caracteres.")),
     solution: z.string().min(6, "A solução deve conter no mínimo 6 caracteres."),
-    status: z.boolean()
+    tags: z.string().nullable(),
+    isActive: z.boolean()
 })
 
 export type CreateKnowledgeSchema = z.infer<typeof createKnowledgeSchema>
@@ -50,7 +51,8 @@ export function Form() {
         defaultValues: {
             problems: [''],
             solution: '',
-            status: true,
+            tags: null,
+            isActive: true,
         }
     })
 
@@ -109,11 +111,9 @@ export function Form() {
     }
 
     async function handleCreateKnowledgeSubmit(data: CreateKnowledgeSchema) {
-        // await createKnowledge(data)
+        await createKnowledge(data)
 
         form.reset()
-
-        console.log(data)
 
         navigate('/knowledge')
     }
@@ -226,17 +226,14 @@ export function Form() {
                 <span className="text-sm text-gray-800">Tags <span className="text-gray-600 text-[0.8rem]">(separadas por vírgula)</span></span>
                 <Input
                     placeholder="ex: sistema, erro, configuração, instação"
-                // {...form.register('solution')}
+                    {...form.register('tags')}
                 />
-                {/* <span className="text-sm text-red-500">
-                    {form.formState.errors.solution?.message}
-                </span> */}
             </div>
 
             <div>
                 <span className="text-sm text-gray-800">Status</span>
-                <Select onValueChange={(value) => form.setValue('status', value === 'true')}
-                    value={form.watch('status') ? 'true' : 'false'}>
+                <Select onValueChange={(value) => form.setValue('isActive', value === 'true')}
+                    value={form.watch('isActive') ? 'true' : 'false'}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue />
                     </SelectTrigger>
