@@ -16,7 +16,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AlertCircle, NotepadText, Plus, SaveAll, Trash2, X } from "lucide-react";
+import { AlertCircle, Bot, BotIcon, CircleAlert, Dna, NotepadText, Plus, SaveAll, Trash2, X } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,9 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
+import { useGenerateProblems } from "../http/use-generate-problems";
+import { toast } from "sonner";
 
 export interface Problem {
     id: string
@@ -64,6 +67,10 @@ export function Form() {
             isError: false
         }
     ])
+
+    const { refetch, isFetching } = useGenerateProblems(problems[0].problem);
+
+    const [generateProblems, setGenerateProblems] = useState(false)
 
     const [activeTab, setActiveTab] = useState(problems[0].title)
 
@@ -110,6 +117,42 @@ export function Form() {
         }
     }
 
+    async function handleGenerateProblems(e: React.MouseEvent<HTMLButtonElement>) {
+        e.preventDefault();
+        if (!problems[0].problem) {
+            toast.error("Para gerar problemas, o Problema 1 deverá ser preenchido!", {
+                position: 'top-center'
+            })
+            return
+        }
+        try {
+            const { data: response } = await refetch();
+
+            if (!response) {
+                return
+            }
+
+            const newProblems = response.split(',').map(p => p.trim());
+
+            const startingIndex = problems.length;
+
+            const problemsFormated: Problem[] = newProblems.map((item, i) => ({
+                id: crypto.randomUUID(),
+                problem: item,
+                isError: item.length <= 6,
+                title: `Problema ${startingIndex + i + 1}`
+            }));
+
+            setProblems(prev => [...prev, ...problemsFormated]);
+
+            const currentFormProblems = form.getValues('problems');
+            form.setValue('problems', [...currentFormProblems, ...problemsFormated.map(p => p.problem)]);
+            setGenerateProblems(true)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     async function handleCreateKnowledgeSubmit(data: CreateKnowledgeSchema) {
         await createKnowledge(data)
 
@@ -121,21 +164,60 @@ export function Form() {
     return (
         <form onSubmit={form.handleSubmit(handleCreateKnowledgeSubmit)} className="flex flex-col gap-6">
             <div className="flex items-center gap-2">
-                <NotepadText />
+                <NotepadText className="text-gray-600" size={20} />
                 <h3 className="text-gray-800 font-medium">Informações do Conhecimento</h3>
             </div>
             <Separator />
-            <div>
-                <div className="flex flex-col lg:flex-row items-center justify-between">
-                    <span className="text-sm text-gray-800">Problema ou Questão <span className="text-red-500">*</span></span>
-                    <Button
-                        className="bg-blue-500 hover:bg-blue-400"
-                        type="button"
-                        onClick={() => handleCreateNewProblem()}
-                    >
-                        <Plus />
-                        Adicionar problema
-                    </Button>
+            <div className="border p-4 rounded-lg">
+                <div className="flex flex-col lg:flex-row items-center gap-4 justify-between">
+                    <div className="flex items-center gap-1">
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <CircleAlert className="text-amber-500" size={15} />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>É possível cadastrar problemas com IA a partir de um problema principal ou de forma manual.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <span className="text-sm text-gray-800">Problemas ou Questões <span className="text-red-500">*</span></span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button
+                                    className="bg-sky-500 hover:bg-sky-400"
+                                    type="button"
+                                    onClick={handleGenerateProblems}
+                                    disabled={isFetching || generateProblems}
+                                >
+                                    {isFetching ? (
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                    ) : (
+                                        <BotIcon className="h-5 w-5" />
+                                    )}
+                                    {isFetching ? "Gerando Problemas..." : "Gerar Problemas"}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>A IA irá cadastrar problemas com base no mesmo contexto do Problema 1.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button
+                                    className="bg-violet-500 hover:bg-violet-400"
+                                    type="button"
+                                    onClick={() => handleCreateNewProblem()}
+                                >
+                                    <Plus />
+                                    Adicionar problema
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Cadastrar um novo problema de forma manual.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                 </div>
 
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full bg-white">
@@ -153,7 +235,7 @@ export function Form() {
 
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <AlertCircle size={15} className="text-amber-500 cursor-pointer" />
+                                                <AlertCircle size={15} className="text-red-500 cursor-pointer" />
                                             </TooltipTrigger>
                                             <TooltipContent>
                                                 <p>O problema deve ter no mínimo 6 caracteres.</p>
@@ -181,6 +263,7 @@ export function Form() {
                             <TabsContent key={item.id} value={item.title}>
                                 <Textarea
                                     placeholder="Descreva o problema..."
+                                    className="bg-gray-100"
                                     {...form.register(`problems.${index}`)}
                                     onChange={(e) => {
                                         form.setValue(`problems.${index}`, e.target.value);
@@ -190,68 +273,82 @@ export function Form() {
                                             copy[index].isError = e.target.value.length <= 6;
                                             return copy;
                                         });
+                                        form.trigger(`problems.${index}`);
                                     }}
                                 />
-                                <span className="text-sm text-red-500">
-                                    {form.formState.errors.problems?.[index]?.message}
-                                </span>
                             </TabsContent>
                         )
                     })}
                 </Tabs>
 
             </div>
+            <div className="flex flex-col gap-2">
+                <div className="flex gap-1 items-center">
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <CircleAlert className="text-amber-500" size={15} />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>Todos os problemas acima compartilharão a mesma solução. Para soluções diferentes, crie um novo conhecimento.</p>
+                        </TooltipContent>
+                    </Tooltip>
 
-            <div>
-                <Alert variant="default" className="bg-amber-50 text-amber-500 border border-amber-500">
-                    <AlertCircle />
-                    <AlertTitle>
-                        Todos os problemas acima compartilharão a mesma solução. Para soluções diferentes, crie um novo conhecimento.
-                    </AlertTitle>
-                </Alert>
-            </div>
-
-            <div>
-                <span className="text-sm text-gray-800">Solução ou resposta <span className="text-red-500">*</span></span>
+                    <span className="text-sm text-gray-800">Solução ou resposta <span className="text-red-500">*</span></span>
+                </div>
                 <Textarea
+                    className="bg-gray-100"
                     placeholder="Descreva a solução detalhada para o problema..."
                     {...form.register('solution')}
                 />
-                <span className="text-sm text-red-500">
-                    {form.formState.errors.solution?.message}
-                </span>
+                {form.formState.errors.solution && (
+                    <span className="text-[0.8rem] text-red-500 border border-red-300 bg-red-50 rounded-sm p-1 pl-2">
+                        {form.formState.errors.solution?.message}
+                    </span>
+                )}
             </div>
 
-            <div>
+            <div className="flex flex-col gap-2">
                 <span className="text-sm text-gray-800">Tags <span className="text-gray-600 text-[0.8rem]">(separadas por vírgula)</span></span>
                 <Input
+                    className="bg-gray-100"
                     placeholder="ex: sistema, erro, configuração, instação"
                     {...form.register('tags')}
                 />
             </div>
 
-            <div>
+            <div className="flex flex-col gap-2">
                 <span className="text-sm text-gray-800">Status</span>
                 <Select onValueChange={(value) => form.setValue('isActive', value === 'true')}
                     value={form.watch('isActive') ? 'true' : 'false'}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-[180px] bg-gray-100">
                         <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-gray-100">
                         <SelectItem value="true">Ativo</SelectItem>
                         <SelectItem value="false">Inativo</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
 
+            <Separator />
+
             <div className="flex gap-4 items-center justify-end">
                 <Button variant="destructive" type="button" onClick={() => navigate('/knowledge')} className="w-40 p-2">
                     <X />
                     Cancelar
                 </Button>
-                <Button className="bg-blue-500 hover:bg-blue-400 w-40 p-2" type="submit" disabled={isPending}>
-                    <SaveAll />
-                    Salvar
+
+                <Button
+                    className="bg-blue-500 hover:bg-blue-400 w-40 p-2 flex items-center justify-center gap-2"
+                    type="submit"
+                    disabled={isPending}
+                >
+                    {isPending ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                        <SaveAll className="h-5 w-5" />
+                    )}
+                    {isPending ? "Salvando..." : "Salvar"}
                 </Button>
             </div>
         </form>

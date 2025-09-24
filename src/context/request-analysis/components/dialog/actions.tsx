@@ -8,9 +8,11 @@ export interface RequestDialogActionsProps {
     action: 'edit' | 'view'
     state: 'APPROVED' | 'DENIED' | 'DEFAULT'
     onSetModalState: (state: 'APPROVED' | 'DENIED' | 'DEFAULT') => void
+    onUpdateSubmit: () => void;
+    onConfirmSubmit: () => void;
 }
 
-export function RequestDialogActions({ status, action, onSetModalState, state }: RequestDialogActionsProps) {
+export function RequestDialogActions({ status, action, onSetModalState, state, onConfirmSubmit, onUpdateSubmit }: RequestDialogActionsProps) {
     return (
         <div className="flex items-end justify-end gap-2">
             {action === 'edit' && (
@@ -19,7 +21,7 @@ export function RequestDialogActions({ status, action, onSetModalState, state }:
                         <Button className="border" variant="ghost">Fechar</Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button className="border bg-blue-500 hover:bg-blue-400" variant="default">Editar</Button>
+                        <Button className="border bg-blue-500 hover:bg-blue-400" variant="default" onClick={onUpdateSubmit}>Editar</Button>
                     </DialogClose>
                 </>
             )}
@@ -38,53 +40,66 @@ export function RequestDialogActions({ status, action, onSetModalState, state }:
                     <Button
                         className="border border-red-500 text-red-500 hover:text-red-500"
                         variant="ghost"
-                        onClick={() => onSetModalState('DENIED')}
+                        onClick={() => {
+                            onSetModalState('DENIED')
+                            onConfirmSubmit
+                        }
+                        }
                     >
                         <X /> Negar
                     </Button>
                     <Button
                         className="border border-emerald-500 text-emerald-500 hover:text-emerald-500"
                         variant="ghost"
-                        onClick={() => onSetModalState('APPROVED')}
+                        onClick={() => {
+                            onSetModalState('APPROVED')
+                            onConfirmSubmit
+                        }}
+
                     >
                         <Check /> Aprovar
                     </Button>
                 </>
-            )}
+            )
+            }
 
-            {(action === 'view' && status === 'PENDING' && state === 'APPROVED') && (
-                <>
-                    <DialogClose asChild>
-                        <Button className="border" variant="ghost">Fechar</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                        <Button
-                            className="border border-emerald-500 text-emerald-500 hover:text-emerald-500"
-                            variant="ghost"
-                            onClick={() => onSetModalState('DEFAULT')}
-                        >
-                            <Check /> Confirmar
-                        </Button>
-                    </DialogClose>
-                </>
-            )}
+            {
+                (action === 'view' && status === 'PENDING' && state === 'APPROVED') && (
+                    <>
+                        <DialogClose asChild>
+                            <Button className="border" variant="ghost">Fechar</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                            <Button
+                                className="border border-emerald-500 text-emerald-500 hover:text-emerald-500"
+                                variant="ghost"
+                                onClick={() => onSetModalState('DEFAULT')}
+                            >
+                                <Check /> Confirmar
+                            </Button>
+                        </DialogClose>
+                    </>
+                )
+            }
 
-            {(action === 'view' && status === 'PENDING' && state === 'DENIED') && (
-                <>
-                    <DialogClose asChild>
-                        <Button className="border" variant="ghost">Fechar</Button>
-                    </DialogClose>
-                    <DialogClose asChild>
-                        <Button
-                            className="border border-red-500 text-red-500 hover:text-red-500"
-                            variant="ghost"
-                            onClick={() => onSetModalState('DEFAULT')}
-                        >
-                            <X /> Confirmar
-                        </Button>
-                    </DialogClose>
-                </>
-            )}
-        </div>
+            {
+                (action === 'view' && status === 'PENDING' && state === 'DENIED') && (
+                    <>
+                        <DialogClose asChild>
+                            <Button className="border" variant="ghost">Fechar</Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                            <Button
+                                className="border border-red-500 text-red-500 hover:text-red-500"
+                                variant="ghost"
+                                onClick={() => onSetModalState('DEFAULT')}
+                            >
+                                <X /> Confirmar
+                            </Button>
+                        </DialogClose>
+                    </>
+                )
+            }
+        </div >
     )
 }

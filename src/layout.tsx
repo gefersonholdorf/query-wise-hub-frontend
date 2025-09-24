@@ -12,11 +12,11 @@ export function Layout() {
     }
 
     return (
-        <div className="relative w-full min-h-screen flex bg-gray-100">
+        <div className="relative w-full min-h-screen flex bg-[url('/fundo.png')] bg-center bg-cover bg-no-repeat">
             <aside
                 className={`
                     fixed top-0 left-0 z-40
-                    h-screen w-64 bg-white shadow-2xs border-r
+                    h-screen w-64 bg-white/70 shadow-2xs border-r
                     flex flex-col justify-between
                     transition-transform duration-300 ease-in-out
                     ${open ? 'translate-x-0' : '-translate-x-full'}

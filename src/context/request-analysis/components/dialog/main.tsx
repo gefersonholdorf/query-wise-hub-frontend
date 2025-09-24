@@ -30,8 +30,8 @@ export function RequestDialogComponent({ children, action }: RequestDialogCompon
             "Dados inconsistentes entre cache e banco de dados",
             "Logs não estão sendo enviados corretamente para o sistema de monitoramento"
         ],
-        solution: "Revisar configuração do balanceador de carga, otimizar queries lentas, corrigir integração com o provedor OAuth2, alinhar políticas de invalidação de cache e reconfigurar o agente de logs.",
-        tags: ["backend", "infra", "auth", "performance", "logs"],
+        solution: "Revisar configuração do balanceador de carga, otimizar queries lentas, corrigir integração com o provedor OAuth2, alinhar políticas de invalidação de cache e reconfigurar o agente de logs.Revisar configuração do balanceador de carga, otimizar queries lentas, corrigir integração com o provedor OAuth2, alinhar políticas de invalidação de cache e reconfigurar o agente de logs.Revisar configuração do balanceador de carga, otimizar queries lentas, corrigir integração com o provedor OAuth2, alinhar políticas de invalidação de cache e reconfigurar o agente de logs.",
+        tags: "Tag, infra, logs",
         observation: 'Aprovado',
         status: "PENDING",
         createdBy: "geferson.silva",
@@ -39,6 +39,7 @@ export function RequestDialogComponent({ children, action }: RequestDialogCompon
     }
 
     const [modalState, setModalState] = useState<'APPROVED' | 'DENIED' | 'DEFAULT'>('DEFAULT')
+    const [handlers, setHandlers] = useState<{ update?: () => void; confirm?: () => void }>({});
 
     function handleSetModalState(state: 'APPROVED' | 'DENIED' | 'DEFAULT') {
         setModalState(state)
@@ -49,9 +50,15 @@ export function RequestDialogComponent({ children, action }: RequestDialogCompon
             <ScrollArea className="w-full h-150 pr-4">
                 <div className="flex flex-col gap-4">
                     <RequestDialog.Header status={requestAnalysisExample.status} />
-                    <RequestDialog.Content requestAnalysis={requestAnalysisExample} action={action} state={modalState} />
+                    <RequestDialog.Content requestAnalysis={requestAnalysisExample} action={action} state={modalState} onRegisterHandlers={setHandlers} />
                     <Separator />
-                    <RequestDialog.Actions status={requestAnalysisExample.status} action={action} onSetModalState={handleSetModalState} state={modalState} />
+                    <RequestDialog.Actions
+                        status={requestAnalysisExample.status}
+                        action={action}
+                        onSetModalState={handleSetModalState}
+                        state={modalState}
+                        onUpdateSubmit={handlers.update ?? (() => { })}
+                        onConfirmSubmit={handlers.confirm ?? (() => { })} />
                 </div>
             </ScrollArea>
         </RequestDialog.Wrapper>
