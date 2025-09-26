@@ -1,7 +1,8 @@
-import { BookOpen, ChevronLeft, ClipboardList, Cog, LogOut, Menu, Plus, Users2 } from "lucide-react";
+import { BookOpen, ChevronLeft, CircleCheckBig, CircleX, ClipboardList, Cog, LayoutDashboard, Menu, Plus, Users2 } from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { NavComponent } from "./components/nav/nav-component";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./components/ui/tooltip";
 
 export function Layout() {
     const [open, setOpen] = useState(false);
@@ -20,7 +21,7 @@ export function Layout() {
                     flex flex-col justify-between
                     transition-transform duration-300 ease-in-out
                     ${open ? 'translate-x-0' : '-translate-x-full'}
-                    lg:translate-x-0 lg:sticky lg:top-0
+                    lg:translate-x-0 lg:sticky lg:top-0 shadow-[0_0_10px_5px_rgba(0,0,0,0.08)]
                 `}
             >
                 <div className="flex flex-col justify-between items-center mb-6 p-3">
@@ -42,6 +43,7 @@ export function Layout() {
 
                 <nav className="flex flex-col gap-1 w-full p-2">
                     <span className="text-sm text-gray-600 font-semibold p-2">MÓDULOS PRINCIPAIS</span>
+                    <Link to="/home"><NavComponent active={location.pathname === '/home' ? 'select' : 'default'} title="Página Inicial" icon={<LayoutDashboard size={15} />} /></Link>
                     <Link to="/knowledge"><NavComponent active={location.pathname.startsWith('/knowledge') ? 'select' : 'default'} title="Base de Conhecimento" icon={<BookOpen size={15} />} /></Link>
                     <Link to="/create-knowledge"><NavComponent active={location.pathname === '/create-knowledge' ? 'select' : 'default'} title="Novo Conhecimento" icon={<Plus size={15} />} /></Link>
                     <Link to="/request-analysis"><NavComponent active={location.pathname === '/request-analysis' ? 'select' : 'default'} title="Análise de Solicitações" icon={<ClipboardList size={15} />} /></Link>
@@ -53,17 +55,45 @@ export function Layout() {
                     <Link to="/settings"><NavComponent active={location.pathname === '/settings' ? 'select' : 'default'} title="Configurações" icon={<Cog size={15} />} /></Link>
                 </nav>
 
+                <nav className="flex flex-col gap-1 w-full p-2">
+                    <span className="text-sm text-gray-600 font-semibold p-2">STATUS DOS SERVIÇOS</span>
+                    <div className="pl-2">
+                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <CircleCheckBig className="text-emerald-600" size={15} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Adicionar novo problema.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            <span>API</span>
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <CircleCheckBig className="text-emerald-600" size={15} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Adicionar novo problema.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            <span>MYSQl</span>
+                        </div>
+                        <div className="flex pr-8 items-center gap-1 text-sm text-gray-600">
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <CircleX className="text-red-600" size={15} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Adicionar novo problema.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                            <span>QDRANT</span>
+                        </div>
+                    </div>
+                </nav>
                 <div>
-
-                </div>
-                <div>
-                </div>
-
-                <div className="p-4 flex flex-col gap-2 mb-6">
-                    <Link to="/login" className="pl-1 flex gap-2 tex-gray-500 items-center text-[0.9rem] hover:text-red-600">
-                        <LogOut size={15} />
-                        Sair
-                    </Link>
                 </div>
             </aside>
 

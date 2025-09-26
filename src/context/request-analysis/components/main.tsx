@@ -1,9 +1,16 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: <"explanation"> */
-import { Calculator, ChartSpline, Check, Clock, X } from "lucide-react"
-import { CardComponent } from "./card"
-import { Wrapper } from "./wrapper"
-import { RequestCard } from "./request-card"
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <"explanation"> */
+/** biome-ignore-all assist/source/organizeImports: <"explanation"> */
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Calculator, ChartSpline, Check, Clock, Loader, X } from "lucide-react";
+import { CardComponent } from "./card";
+import { RequestCard } from "./request-card";
+import { Wrapper } from "./wrapper";
+import { useEffect, useRef, useState } from 'react';
+import { useFetchAnalysis } from '../http/use-fetch-analysis';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ErrorLoading } from '@/components/error-loading';
+import { useSummaryAnalysis } from '../http/use-summary-analysis';
 
 export const RequestAnalysis = {
     Wrapper: Wrapper,
@@ -11,69 +18,147 @@ export const RequestAnalysis = {
     RequestCard: RequestCard
 }
 
+export interface Analysys {
+    id: string,
+    problems: string[]
+    solution: string
+    createdAt: Date
+    createdBy: string
+    tags: string | null
+    status: 'PENDING' | 'APPROVED' | 'DENIED'
+}
+
 export function RequestAnalysisComponent() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [analysis, setAnalysis] = useState<Analysys[]>([]);
+    const [filteringStatus, setFilteringStatus] = useState<'PENDING' | 'APPROVED' | 'DENIED'>('PENDING')
+    const [hasMore, setHasMore] = useState(true)
+
+    const { data, isFetching, isError } = useFetchAnalysis(currentPage, filteringStatus);
+    const { data: summaryData, isFetching: summaryIsFetching } = useSummaryAnalysis()
+
+    function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED') {
+        setHasMore(true)
+        setAnalysis([])
+        setCurrentPage(1)
+        setFilteringStatus(status)
+    }
+
+    useEffect(() => {
+        if (data?.data) {
+            setAnalysis(prev => [...prev, ...data.data]);
+            if (data.data.length === 0) {
+                setHasMore(false);
+            }
+        }
+    }, [data]);
+
+    const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (!sentinelRef.current) return;
+
+        const observer = new IntersectionObserver(entries => {
+            // Só incrementa se não estiver carregando
+            if (entries.some(entry => entry.isIntersecting) && !isFetching) {
+                setCurrentPage(prev => prev + 1);
+            }
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        });
+
+        observer.observe(sentinelRef.current);
+        return () => observer.disconnect();
+    }, [isFetching]);
+
+    if (isError) return <ErrorLoading />;
+
     return (
         <RequestAnalysis.Wrapper>
             <header className="grid grid-cols-5 gap-10">
-                <Tooltip>
-                    <TooltipTrigger>
-                        <RequestAnalysis.Card title="Pendentes" value={"3"} icon={<Clock />} color="amber" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Filtrar por solicitações pendentes.</p>
-                    </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger>
-                        <RequestAnalysis.Card title="Aprovadas" value={"3"} icon={<Check />} color="emerald" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Filtrar por solicitações aprovadas.</p>
-                    </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger>
-                        <RequestAnalysis.Card title="Negadas" value={"3"} icon={<X />} color="red" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Filtrar por solicitações negadas.</p>
-                    </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger>
-                        <RequestAnalysis.Card title="Total de Solicitações" value={"9"} icon={<Calculator />} color="gray" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Quantitativo de solicitações.</p>
-                    </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                    <TooltipTrigger>
-                        <RequestAnalysis.Card title="Taxa de Aprovação" value={"57%"} icon={<ChartSpline />} color="blue" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>Porcentagem de aprovação de solicitações.</p>
-                    </TooltipContent>
-                </Tooltip>
+                {summaryIsFetching ? (
+                    <Skeleton className='w-full h-full rounded-2xl' />
+                ) : (
+                    <>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <RequestAnalysis.Card select={filteringStatus === 'PENDING'} status='PENDING' onSetFiltering={handleSetFilteringStatus} title="Pendentes" value={String(summaryData?.totalPendings)} icon={<Clock />} color="amber" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Filtrar por solicitações pendentes.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <RequestAnalysis.Card select={filteringStatus === 'APPROVED'} status='APPROVED' onSetFiltering={handleSetFilteringStatus} title="Aprovadas" value={String(summaryData?.totalApproveds)} icon={<Check />} color="emerald" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Filtrar por solicitações aprovadas.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <RequestAnalysis.Card select={filteringStatus === 'DENIED'} status='DENIED' onSetFiltering={handleSetFilteringStatus} title="Negadas" value={String(summaryData?.totalDenieds)} icon={<X />} color="red" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Filtrar por solicitações negadas.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <RequestAnalysis.Card title="Total de Solicitações" value={String(summaryData?.total)} icon={<Calculator />} color="gray" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Quantitativo de solicitações.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <RequestAnalysis.Card title="Taxa de Aprovação" value={`${String(summaryData?.approvalRate)}%`} icon={<ChartSpline />} color="blue" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Porcentagem de aprovação de solicitações.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </>
+                )}
+
             </header>
             <main className="pt-6 flex flex-col gap-4">
-                <span className="text-sm text-gray-600">4 solicitação(ões) encontrada(s)</span>
-                <RequestAnalysis.RequestCard
-                    id="1"
-                    problems={["Como visualizar a importação automática de uma apólice?Acesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importações", "Outro Teste"]}
-                    solution="Acesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importações"
-                    createdAt={new Date()}
-                    createdBy="Geferson"
-                    status='PENDING'
-                />
-                <RequestAnalysis.RequestCard
-                    id="1"
-                    problems={["Como visualizar a importação automática de uma apólice?Acesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importações", "Outro Teste"]}
-                    solution="Acesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importaçõesAcesse o menu Apólice e clique no botão visualizar importações"
-                    createdAt={new Date()}
-                    createdBy="Geferson"
-                    status='APPROVED'
-                />
+                {(isFetching && currentPage === 1) ? (
+                    <Skeleton className="w-50 h-5" />
+                ) : (
+                    <span className="text-sm text-gray-600">{analysis.length} solicitação(ões) encontrada(s)</span>
+                )}
+
+                {(isFetching && currentPage === 1) ? (
+                    <div>
+                        {Array.from({ length: 10 }).map((_, index) => (
+                            <Skeleton key={index.toFixed()} className="w-full h-60 mb-4" />
+                        ))}
+                    </div>
+                ) : analysis.map(item => (
+                    <RequestAnalysis.RequestCard
+                        key={item.id}
+                        id={item.id}
+                        problems={item.problems}
+                        solution={item.solution}
+                        createdAt={item.createdAt}
+                        createdBy={item.createdBy}
+                        status={item.status}
+                    />
+                ))}
+
+                {isFetching && currentPage > 1 && (
+                    <div className="flex items-center justify-center gap-2 text-gray-500">
+                        <Loader className="animate-spin h-5 w-5 text-blue-500" />
+                        <span className='text-sm text-gray-600'>Buscando mais itens...</span>
+                    </div>
+                )}
+
+                {hasMore ? <div ref={sentinelRef}></div> : <div className="text-sm text-gray-600 w-full flex items-center justify-center">Todos os resultados foram carregados</div>}
             </main>
         </RequestAnalysis.Wrapper>
     )
