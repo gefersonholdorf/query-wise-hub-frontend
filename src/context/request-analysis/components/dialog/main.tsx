@@ -42,6 +42,7 @@ export function RequestDialogComponent({ children, action }: RequestDialogCompon
     const [handlers, setHandlers] = useState<{ update?: () => void; confirm?: () => void }>({});
 
     function handleSetModalState(state: 'APPROVED' | 'DENIED' | 'DEFAULT') {
+        console.log('Chamou o handle setModal')
         setModalState(state)
     }
 
@@ -50,7 +51,7 @@ export function RequestDialogComponent({ children, action }: RequestDialogCompon
             <ScrollArea className="w-full h-150 pr-4">
                 <div className="flex flex-col gap-4">
                     <RequestDialog.Header status={requestAnalysisExample.status} />
-                    <RequestDialog.Content requestAnalysis={requestAnalysisExample} action={action} state={modalState} onRegisterHandlers={setHandlers} />
+                    <RequestDialog.Content onModalState={modalState} requestAnalysis={requestAnalysisExample} action={action} state={modalState} onRegisterHandlers={setHandlers} />
                     <Separator />
                     <RequestDialog.Actions
                         status={requestAnalysisExample.status}

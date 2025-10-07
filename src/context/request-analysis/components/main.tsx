@@ -19,7 +19,7 @@ export const RequestAnalysis = {
 }
 
 export interface Analysys {
-    id: string,
+    id: number,
     problems: string[]
     solution: string
     createdAt: Date
@@ -38,6 +38,9 @@ export function RequestAnalysisComponent() {
     const { data: summaryData, isFetching: summaryIsFetching } = useSummaryAnalysis()
 
     function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED') {
+        if (status === filteringStatus) {
+            return
+        }
         setHasMore(true)
         setAnalysis([])
         setCurrentPage(1)
@@ -49,6 +52,9 @@ export function RequestAnalysisComponent() {
             setAnalysis(prev => [...prev, ...data.data]);
             if (data.data.length === 0) {
                 setHasMore(false);
+                if (currentPage === 1) {
+                    setAnalysis([])
+                }
             }
         }
     }, [data]);

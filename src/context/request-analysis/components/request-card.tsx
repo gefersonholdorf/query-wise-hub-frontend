@@ -6,11 +6,12 @@ import { truncatedText } from '@/helpers/truncate-text';
 import dayjs from 'dayjs';
 import { Calendar, Check, Edit, Eye, MessageSquare, Tag, User, X } from 'lucide-react';
 import { RequestDialogComponent } from './dialog/main';
+import { RequestDialogConfirmComponent } from './dialog-confirm/main';
 
 dayjs.locale('pt-br');
 
 export interface CardProps {
-    id: string
+    id: number
     problems: string[]
     solution: string
     createdBy: string
@@ -18,7 +19,7 @@ export interface CardProps {
     status: 'PENDING' | 'APPROVED' | 'DENIED'
 }
 
-export function RequestCard({ problems, solution, createdBy, createdAt, status }: CardProps) {
+export function RequestCard({ id, problems, solution, createdBy, createdAt, status }: CardProps) {
     return (
         <div className="group flex flex-col gap-4 bg-white rounded-xl transition-all duration-300 transform hover:scale-[1.00] hover:shadow-lg shadow p-4 border-2 hover:border-blue-300">
             <div className='flex items-center justify-between'>
@@ -56,9 +57,11 @@ export function RequestCard({ problems, solution, createdBy, createdAt, status }
                             </Tooltip>
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <div className='hover:bg-emerald-50 hover:text-emerald-500 p-2 rounded-sm'>
-                                        <Check size={20} />
-                                    </div>
+                                    <RequestDialogConfirmComponent type='APPROVED' id={id}>
+                                        <div className='hover:bg-emerald-50 hover:text-emerald-500 p-2 rounded-sm'>
+                                            <Check size={20} />
+                                        </div>
+                                    </RequestDialogConfirmComponent>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Aprovar Solicitação</p>
@@ -67,9 +70,11 @@ export function RequestCard({ problems, solution, createdBy, createdAt, status }
 
                             <Tooltip>
                                 <TooltipTrigger>
-                                    <div className='hover:bg-red-50 hover:text-red-500 p-2 rounded-sm'>
-                                        <X size={20} />
-                                    </div>
+                                    <RequestDialogConfirmComponent type='DENIED' id={id}>
+                                        <div className='hover:bg-red-50 hover:text-red-500 p-2 rounded-sm'>
+                                            <X size={20} />
+                                        </div>
+                                    </RequestDialogConfirmComponent>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Negar Solicitação</p>

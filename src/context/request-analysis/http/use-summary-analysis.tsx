@@ -10,7 +10,7 @@ export interface SummaryAnalysisResponse {
 
 export function useSummaryAnalysis() {
     return useQuery({
-        queryKey: ['analysis'],
+        queryKey: ['summary-analysis'],
         queryFn: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
             const res = await fetch(`${apiUrl}/api/v1/analysis/summary`)

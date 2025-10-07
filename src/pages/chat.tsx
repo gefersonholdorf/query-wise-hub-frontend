@@ -8,34 +8,35 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { ChatComponent } from "@/context/chat/components/main";
 import { RequestAnalysisComponent } from "@/context/request-analysis/components/main";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, MessageSquareMore } from "lucide-react";
 import { Link } from "react-router-dom";
 
-export function RequestAnalysisPage() {
+export function ChatPage() {
     return (
         <main className="h-full flex flex-col gap-2">
             <Breadcrumb className="text-[0.6rem]">
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link to={"/knowledge"}>Base de Conhecimento</Link>
+                            <Link to={"/request-analysis"}>Análise de Solicitações</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbPage>Análise de Solicitações</BreadcrumbPage>
+                        <BreadcrumbPage>Chat Assistente</BreadcrumbPage>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
             <PageHeader
-                title="Análise de Solicitações"
-                description="Gerencie as solicitações de novos conhecimentos."
-                icon={<ClipboardList size={15} />}
+                title="Chat Assistente"
+                description="Converse com o assistente para realizar as ações necessárias."
+                icon={<MessageSquareMore size={15} />}
             />
 
             <div className="flex-1 w-full">
-                <RequestAnalysisComponent />
+                <ChatComponent />
             </div>
         </main>
     );

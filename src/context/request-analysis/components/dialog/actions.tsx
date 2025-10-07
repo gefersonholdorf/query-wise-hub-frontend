@@ -26,13 +26,13 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                 </>
             )}
 
-            {(action === 'view' && status !== 'PENDING') && (
+            {(action === 'view') && (
                 <DialogClose asChild>
                     <Button className="border" variant="ghost">Fechar</Button>
                 </DialogClose>
             )}
 
-            {(action === 'view' && status === 'PENDING' && state === 'DEFAULT') && (
+            {/* {(action === 'view' && status === 'PENDING' && state === 'DEFAULT') && (
                 <>
                     <DialogClose asChild>
                         <Button className="border" variant="ghost">Fechar</Button>
@@ -42,7 +42,6 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                         variant="ghost"
                         onClick={() => {
                             onSetModalState('DENIED')
-                            onConfirmSubmit
                         }
                         }
                     >
@@ -53,7 +52,6 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                         variant="ghost"
                         onClick={() => {
                             onSetModalState('APPROVED')
-                            onConfirmSubmit
                         }}
 
                     >
@@ -61,9 +59,9 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                     </Button>
                 </>
             )
-            }
+            } */}
 
-            {
+            {/* {
                 (action === 'view' && status === 'PENDING' && state === 'APPROVED') && (
                     <>
                         <DialogClose asChild>
@@ -73,16 +71,19 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                             <Button
                                 className="border border-emerald-500 text-emerald-500 hover:text-emerald-500"
                                 variant="ghost"
-                                onClick={() => onSetModalState('DEFAULT')}
+                                onClick={() => {
+                                    onConfirmSubmit()
+                                }
+                                }
                             >
                                 <Check /> Confirmar
                             </Button>
                         </DialogClose>
                     </>
                 )
-            }
+            } */}
 
-            {
+            {/* {
                 (action === 'view' && status === 'PENDING' && state === 'DENIED') && (
                     <>
                         <DialogClose asChild>
@@ -92,14 +93,16 @@ export function RequestDialogActions({ status, action, onSetModalState, state, o
                             <Button
                                 className="border border-red-500 text-red-500 hover:text-red-500"
                                 variant="ghost"
-                                onClick={() => onSetModalState('DEFAULT')}
+                                onClick={() => {
+                                    onConfirmSubmit()
+                                }}
                             >
                                 <X /> Confirmar
                             </Button>
                         </DialogClose>
                     </>
                 )
-            }
+            } */}
         </div >
     )
 }

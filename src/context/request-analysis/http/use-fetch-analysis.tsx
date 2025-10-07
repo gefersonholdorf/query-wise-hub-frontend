@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 
 export interface FetchAnalysisResponse {
     data: {
-        id: string,
+        id: number,
         problems: string[]
         solution: string
         createdAt: Date
