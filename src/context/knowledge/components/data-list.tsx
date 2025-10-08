@@ -1,68 +1,43 @@
-import { useCallback, useRef } from "react";
+import { ErrorLoading } from "@/components/error-loading";
 import { useFetchKnowledge } from "../http/use-fetch-knowledge";
-import { Knowledge } from "./main";
+import { Card } from "./card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export function DataList() {
     const {
         data,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
         isPending,
         isError,
-    } = useFetchKnowledge();
-
-    const observerRef = useRef<IntersectionObserver | null>(null);
-
-    const observeLastItem = useCallback(
-        (node: HTMLDivElement) => {
-            if (isFetchingNextPage) return;
-
-            if (observerRef.current) observerRef.current.disconnect();
-
-            observerRef.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasNextPage) {
-                    fetchNextPage();
-                }
-            });
-
-            if (node) observerRef.current.observe(node);
-        },
-        [fetchNextPage, hasNextPage, isFetchingNextPage]
-    );
+    } = useFetchKnowledge({});
 
     if (isPending) return <div>Carregando...</div>;
-    if (isError) return <div>Erro ao carregar dados</div>;
 
-    const items = data?.pages.flatMap((page) =>
-        page.data.map((item) => (
-            <Knowledge.Card key={item.id} id={item.id} problem={item.payload.problem} soluction={item.payload.solution} createdAt={new Date()} createdBy="Gefe" status={true} updatedAt={new Date()} />
-        ))
-    );
+    if (isError) return <ErrorLoading />;
 
     return (
-        <div className="h-[800px] overflow-auto p-4 flex flex-col gap-2">
-            {items?.map((item, index) => {
-                // Referência apenas no último item
-                if (index === items.length - 1) {
-                    return (
-                        <div ref={observeLastItem} key={item.key}>
-                            {item}
-                        </div>
-                    );
-                }
-                return <div key={item.key}>{item}</div>;
-            })}
-
-            {isFetchingNextPage && (
-                <div className="text-center py-2 text-gray-500">Carregando mais...</div>
-            )}
-
-            {!hasNextPage && (
-                <div className="text-center py-2 text-gray-400">
-                    Todos os resultados retornados.
+        <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-3 gap-4">
+                {data.data?.map((item) => (
+                    <div key={item.id}>
+                        <Card knowledge={item} />
+                    </div>
+                )
+                )}
+            </div>
+            <div className="grid grid-cols-2">
+                <span className="text-sm text-gray-600">Mostrando <span className="font-bold">{data.total}</span> resultados</span>
+                <div className="flex items-center justify-end">
+                    <div>
+                        <ChevronLeft />
+                    </div>
+                    <div>
+                        {data.page}
+                    </div>
+                    <div>
+                        <ChevronRight />
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 }

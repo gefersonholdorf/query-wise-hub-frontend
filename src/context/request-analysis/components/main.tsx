@@ -65,7 +65,6 @@ export function RequestAnalysisComponent() {
         if (!sentinelRef.current) return;
 
         const observer = new IntersectionObserver(entries => {
-            // Só incrementa se não estiver carregando
             if (entries.some(entry => entry.isIntersecting) && !isFetching) {
                 setCurrentPage(prev => prev + 1);
             }

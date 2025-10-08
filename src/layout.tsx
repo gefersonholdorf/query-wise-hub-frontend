@@ -13,7 +13,7 @@ export function Layout() {
     }
 
     return (
-        <div className="relative w-full min-h-screen flex bg-[url('/fundo.png')] bg-center bg-cover bg-no-repeat">
+        <div className="relative w-full min-h-screen flex bg-gray-100">
             <aside
                 className={`
                     fixed top-0 left-0 z-40
