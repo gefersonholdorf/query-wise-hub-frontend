@@ -45,7 +45,7 @@ export function Detail({ isAction, knowledge }: KnowledgeDetailProps) {
     const { mutateAsync: createKnowledge, isPending } = useCreateKnowledge()
 
     async function handleCreateKnowledgeSubmit(data: CreateKnowledgeSchema) {
-        await createKnowledge(data)
+        // await createKnowledge(data)
 
         form.reset()
 

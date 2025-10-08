@@ -2,13 +2,15 @@
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { z } from "zod/v4";
+import { _ZodString, z } from "zod/v4";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useChat } from "../http/use-chat";
+import type { IChatMessage } from "./main";
 
 interface InputProps {
-    onSetMessage: (message: string) => void
+    messages: IChatMessage[]
+    onSetMessage: (message?: IChatMessage, id?: string) => void
 }
 
 export const inputSchema = z.object({
@@ -29,9 +31,32 @@ export function Input({ onSetMessage }: InputProps) {
 
     async function handleSendMessage(data: InputSchema) {
         console.log(data)
-        onSetMessage(data.message)
+        onSetMessage({
+            id: crypto.randomUUID(),
+            message: data.message,
+            sender: 'user',
+            timestamp: new Date()
+        })
+
+        const idTemp = crypto.randomUUID()
+
+        onSetMessage({
+            id: idTemp,
+            message: 'Pensando',
+            sender: 'bot',
+            timestamp: new Date()
+        })
+
         const response = await sendChat(data)
-        onSetMessage(response.message)
+
+        onSetMessage(undefined, idTemp)
+
+        onSetMessage({
+            id: crypto.randomUUID(),
+            message: response.message,
+            sender: 'bot',
+            timestamp: new Date()
+        })
         form.reset()
     }
 
