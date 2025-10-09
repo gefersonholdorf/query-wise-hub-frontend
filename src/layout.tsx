@@ -43,7 +43,7 @@ export function Layout() {
 
                 <nav className="flex flex-col gap-1 w-full p-2">
                     <span className="text-sm text-gray-600 font-semibold p-2">MÓDULOS PRINCIPAIS</span>
-                    <Link to="/home"><NavComponent active={location.pathname === '/home' ? 'select' : 'default'} title="Página Inicial" icon={<LayoutDashboard size={15} />} /></Link>
+                    <Link to="/dashboard"><NavComponent active={location.pathname === '/dashboard' ? 'select' : 'default'} title="Página Inicial" icon={<LayoutDashboard size={15} />} /></Link>
                     <Link to="/knowledge"><NavComponent active={location.pathname.startsWith('/knowledge') ? 'select' : 'default'} title="Base de Conhecimento" icon={<BookOpen size={15} />} /></Link>
                     <Link to="/create-knowledge"><NavComponent active={location.pathname === '/create-knowledge' ? 'select' : 'default'} title="Novo Conhecimento" icon={<Plus size={15} />} /></Link>
                     <Link to="/request-analysis"><NavComponent active={location.pathname === '/request-analysis' ? 'select' : 'default'} title="Análise de Solicitações" icon={<ClipboardList size={15} />} /></Link>

@@ -20,7 +20,7 @@ export function useFetchAnalysis(page: number, status: 'PENDING' | 'APPROVED' | 
         queryKey: ['analysis', page, status],
         queryFn: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
-            const res = await fetch(`${apiUrl}/api/v1/analysis?page=${page}&&totalPerPage=4&&status=${status}`)
+            const res = await fetch(`${apiUrl}/api/v1/analysis?page=${page}&&totalPerPage=5&&status=${status}`)
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar análises")

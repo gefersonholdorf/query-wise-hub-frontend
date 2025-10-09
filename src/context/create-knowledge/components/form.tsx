@@ -167,7 +167,6 @@ export function Form() {
                 <NotepadText className="text-gray-600" size={20} />
                 <h3 className="text-gray-800 font-medium">Informações do Conhecimento</h3>
             </div>
-            <Separator />
             <div className="border p-4 rounded-lg">
                 <div className="flex flex-col lg:flex-row items-center gap-4 justify-between">
                     <div className="flex items-center gap-1">
@@ -307,30 +306,30 @@ export function Form() {
                 )}
             </div>
 
-            <div className="flex flex-col gap-2">
-                <span className="text-sm text-gray-800">Tags <span className="text-gray-600 text-[0.8rem]">(separadas por vírgula)</span></span>
-                <Input
-                    className="bg-gray-100"
-                    placeholder="ex: sistema, erro, configuração, instação"
-                    {...form.register('tags')}
-                />
-            </div>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-2">
+                    <span className="text-sm text-gray-800">Tags <span className="text-gray-600 text-[0.8rem]">(separadas por vírgula)</span></span>
+                    <Input
+                        className="bg-gray-100"
+                        placeholder="ex: sistema, erro, configuração, instação"
+                        {...form.register('tags')}
+                    />
+                </div>
 
-            <div className="flex flex-col gap-2">
-                <span className="text-sm text-gray-800">Status</span>
-                <Select onValueChange={(value) => form.setValue('isActive', value === 'true')}
-                    value={form.watch('isActive') ? 'true' : 'false'}>
-                    <SelectTrigger className="w-[180px] bg-gray-100">
-                        <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-gray-100">
-                        <SelectItem value="true">Ativo</SelectItem>
-                        <SelectItem value="false">Inativo</SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className="flex flex-col gap-2">
+                    <span className="text-sm text-gray-800">Status</span>
+                    <Select onValueChange={(value) => form.setValue('isActive', value === 'true')}
+                        value={form.watch('isActive') ? 'true' : 'false'}>
+                        <SelectTrigger className="w-[180px] bg-gray-100">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-100">
+                            <SelectItem value="true">Ativo</SelectItem>
+                            <SelectItem value="false">Inativo</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
-
-            <Separator />
 
             <div className="flex gap-4 items-center justify-end">
                 <Button variant="destructive" type="button" onClick={() => navigate('/knowledge')} className="w-40 p-2">
