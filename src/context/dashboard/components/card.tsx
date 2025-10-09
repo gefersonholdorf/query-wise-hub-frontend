@@ -11,8 +11,7 @@ export interface CardProps {
 export function CardComponent({ title, value, icon, color }: CardProps) {
     return (
         <Card
-
-            className={`flex h-20 items-center justify-center p-2 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+            className={`flex w-full h-full items-center justify-center p-2 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
         >
             <div className="flex items-center justify-between gap-8">
                 <div className="flex flex-col">

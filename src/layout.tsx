@@ -55,45 +55,6 @@ export function Layout() {
                     <Link to="/users"><NavComponent active={location.pathname === '/users' ? 'select' : 'default'} title="Usuários" icon={<Users2 size={15} />} /></Link>
                     <Link to="/settings"><NavComponent active={location.pathname === '/settings' ? 'select' : 'default'} title="Configurações" icon={<Cog size={15} />} /></Link>
                 </nav>
-
-                <nav className="flex flex-col gap-1 w-full p-2">
-                    <span className="text-sm text-gray-600 font-semibold p-2">STATUS DOS SERVIÇOS</span>
-                    <div className="pl-2">
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <CircleCheckBig className="text-emerald-600" size={15} />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Adicionar novo problema.</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <span>API</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-600">
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <CircleCheckBig className="text-emerald-600" size={15} />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Adicionar novo problema.</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <span>MYSQl</span>
-                        </div>
-                        <div className="flex pr-8 items-center gap-1 text-sm text-gray-600">
-                            <Tooltip>
-                                <TooltipTrigger>
-                                    <CircleX className="text-red-600" size={15} />
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Adicionar novo problema.</p>
-                                </TooltipContent>
-                            </Tooltip>
-                            <span>QDRANT</span>
-                        </div>
-                    </div>
-                </nav>
                 <div>
                 </div>
             </aside>
