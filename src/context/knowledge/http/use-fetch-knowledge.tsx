@@ -11,6 +11,7 @@ export interface FetchKnowledgeResponse {
         status: 'PENDING' | 'APPROVED' | 'DENIED'
     }[]
     total: number
+    totalPage: number
     page: number
     totalPerPage: number
 }
