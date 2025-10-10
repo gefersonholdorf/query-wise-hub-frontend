@@ -58,7 +58,7 @@ export function DashboardComponent() {
                     </div>
                 )}
                 {data && (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-center w-full gap-4">
                         <Tooltip>
                             <TooltipTrigger>
                                 <Dashboard.Card title="Total de Conhecimentos" value={String(data.totalKnowledges)} icon={<Book />} color="sky" />
@@ -125,7 +125,7 @@ export function DashboardComponent() {
                         </Tooltip>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Dashboard.Card title="Conh. Usados" value={`${String(data.knowledgesUsed)}`} icon={<TicketSlash />} color="gray" />
+                                <Dashboard.Card title="Conhecimentos Usados" value={`${String(data.knowledgesUsed)}`} icon={<TicketSlash />} color="gray" />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Total de conhecimentos usados para responder o cliente.</p>
@@ -133,7 +133,7 @@ export function DashboardComponent() {
                         </Tooltip>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Dashboard.Card title="Conh. Eficazes" value={`${String(data.effectiveKnowledges)}`} icon={<BookmarkCheck />} color="emerald" />
+                                <Dashboard.Card title="Conhecimentos Eficazes" value={`${String(data.effectiveKnowledges)}`} icon={<BookmarkCheck />} color="emerald" />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Total de conhecimentos que foram usados para responder o cliente e foram eficazes.</p>
@@ -141,7 +141,7 @@ export function DashboardComponent() {
                         </Tooltip>
                         <Tooltip>
                             <TooltipTrigger>
-                                <Dashboard.Card title="Conh. Ineficazes" value={`${String(data.ineffectiveKnowledges)}`} icon={<BookmarkX />} color="red" />
+                                <Dashboard.Card title="Conhecimentos Ineficazes" value={`${String(data.ineffectiveKnowledges)}`} icon={<BookmarkX />} color="red" />
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Total de conhecimentos que foram usados para responder o cliente e foram ineficazes.</p>

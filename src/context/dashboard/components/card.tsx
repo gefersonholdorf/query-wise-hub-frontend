@@ -13,7 +13,7 @@ export function CardComponent({ title, value, icon, color }: CardProps) {
         <Card
             className={`flex w-full h-full items-center justify-center p-2 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
         >
-            <div className="flex items-center justify-between gap-8">
+            <div className="flex items-center justify-center gap-4">
                 <div className="flex flex-col">
                     <span className="text-sm text-gray-600">{title}</span>
                     <span className="text-2xl text-shadow-2xs font-bold text-gray-900">{value}</span>
