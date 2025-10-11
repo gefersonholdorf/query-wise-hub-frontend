@@ -116,7 +116,7 @@ export function AnalysisPendingComponent() {
                                                 <TooltipTrigger asChild>
                                                     <Button
                                                         variant="outline"
-                                                        onClick={() => navigate(`/request-analysis/${item.id}`)}
+                                                        onClick={() => navigate(`/analysis/${item.id}`)}
                                                     >
                                                         <Search />
                                                     </Button>
