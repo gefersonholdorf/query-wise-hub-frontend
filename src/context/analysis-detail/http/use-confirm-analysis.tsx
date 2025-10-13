@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 export interface ConfirmAnalysisRequest {
     status: 'APPROVED' | 'DENIED'
-    observation?: string
+    observation: string
 }
 
 export function useConfirmAnalysis(id: number) {
@@ -44,7 +44,7 @@ export function useConfirmAnalysis(id: number) {
             })
 
             queryClient.invalidateQueries({
-                queryKey: ["summary-analysis"],
+                queryKey: ["dashboard"],
             })
 
             navigate(location.pathname, { replace: true });

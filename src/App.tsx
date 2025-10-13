@@ -21,7 +21,7 @@ export function App() {
             <Route path="/knowledge" element={<KnowledgePage />} />
             <Route path="/create-knowledge" element={<CreateKnowledgePage />} />
             <Route path="/knowledge/:id" element={<KnowledgeDetailPage />} />
-            <Route path="/request-analysis" element={<RequestAnalysisPage />} />
+            <Route path="/analysis" element={<RequestAnalysisPage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/analysis/:id" element={<AnalysisDetailPage />} />

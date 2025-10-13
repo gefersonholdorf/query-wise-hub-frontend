@@ -4,7 +4,7 @@ import { RequestDialogConfirmWrapper } from "./wrapper";
 import { DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DialogClose, DialogDescription } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { useConfirmAnalysis } from "../../http/use-confirm-analysis";
+import { useConfirmAnalysis } from "../../../analysis-detail/http/use-confirm-analysis";
 
 export const RequestDialog = {
     Wrapper: RequestDialogConfirmWrapper,

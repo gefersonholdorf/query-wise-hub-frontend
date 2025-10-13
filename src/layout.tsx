@@ -46,7 +46,7 @@ export function Layout() {
                     <Link to="/dashboard"><NavComponent active={location.pathname === '/dashboard' ? 'select' : 'default'} title="Página Inicial" icon={<LayoutDashboard size={15} />} /></Link>
                     <Link to="/knowledge?page=1"><NavComponent active={location.pathname.startsWith('/knowledge') ? 'select' : 'default'} title="Base de Conhecimento" icon={<BookOpen size={15} />} /></Link>
                     <Link to="/create-knowledge"><NavComponent active={location.pathname === '/create-knowledge' ? 'select' : 'default'} title="Novo Conhecimento" icon={<Plus size={15} />} /></Link>
-                    <Link to="/request-analysis"><NavComponent active={location.pathname === '/request-analysis' ? 'select' : 'default'} title="Análise de Solicitações" icon={<ClipboardList size={15} />} /></Link>
+                    <Link to="/analysis"><NavComponent active={location.pathname.startsWith('/analysis') ? 'select' : 'default'} title="Análise de Solicitações" icon={<ClipboardList size={15} />} /></Link>
                     <Link to="/chat"><NavComponent active={location.pathname === '/chat' ? 'select' : 'default'} title="Chat Assistente" icon={<MessageSquareMore size={15} />} /></Link>
                 </nav>
 

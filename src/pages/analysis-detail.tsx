@@ -19,7 +19,7 @@ export function AnalysisDetailPage() {
                 <BreadcrumbList>
                     <BreadcrumbItem>
                         <BreadcrumbLink asChild>
-                            <Link to={"/request-analysis"}>Análises</Link>
+                            <Link to={"/analysis"}>Análises</Link>
                         </BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />

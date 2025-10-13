@@ -12,7 +12,7 @@ import { Binoculars, Calendar, MessageSquare, Plus, Tag, Trash2, User } from "lu
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod/v4";
-import { useConfirmAnalysis } from "../../http/use-confirm-analysis";
+import { useConfirmAnalysis } from "../../../analysis-detail/http/use-confirm-analysis";
 
 dayjs.locale('pt-br');
 
