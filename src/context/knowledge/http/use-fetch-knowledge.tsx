@@ -5,6 +5,7 @@ export interface FetchKnowledgeResponse {
         id: number,
         problems: string[]
         solution: string
+        views: number
         createdAt: Date
         createdBy: string
         tags: string | null

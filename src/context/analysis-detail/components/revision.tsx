@@ -28,7 +28,7 @@ export function RevisionComponent({ status, revisionForm }: RevisionComponentPro
                     <span className="text-sm text-gray-600">Descrição da Revisão *</span>
                 </div>
                 <Textarea
-                    className='border p-2 rounded-sm bg-gray-50 break-all whitespace-pre-wrap overflow-x-hidden resize-y w-full'
+                    className='border p-2 rounded-sm bg-gray-50 break-all whitespace-pre-wrap overflow-x-hidden resize-y w-full min-h-30'
                     {...revisionForm.register("observation")}
                     placeholder="Descreva os motivos da sua decisão..."
                     disabled={status === 'APPROVED' || status === 'DENIED'}

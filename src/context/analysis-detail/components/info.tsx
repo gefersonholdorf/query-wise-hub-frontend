@@ -26,6 +26,10 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                     <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.createdAt).format('DD/MM/YYYY HH:MM')}</span>
                 </div>
                 <div className="flex flex-col gap-1">
+                    <span className="text-sm text-gray-600">Atualizado em</span>
+                    <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.updatedAt).format('DD/MM/YYYY HH:MM')}</span>
+                </div>
+                <div className="flex flex-col gap-1">
                     <span className="text-sm text-gray-600">Status</span>
                     {analysis.status === 'PENDING' && <Badge className="bg-amber-100 text-amber-700 border border-amber-300"><Clock />PENDENTE</Badge>}
                     {analysis.status === 'APPROVED' && <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300"><CircleCheck />APROVADO</Badge>}
@@ -45,6 +49,30 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                         )}
                     </div>
                 </div>
+                {analysis.status === 'APPROVED' && (
+                    <>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Aprovado em</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.approvedAt).format('DD/MM/YYYY HH:MM')}</span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Aprovado por</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysis.approvedBy}</span>
+                        </div>
+                    </>
+                )}
+                {analysis.status === 'DENIED' && (
+                    <>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Negado em</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.deniedAt).format('DD/MM/YYYY HH:MM')}</span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Negado por</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysis.deniedBy}</span>
+                        </div>
+                    </>
+                )}
             </CardContent>
         </Card >
     )

@@ -15,6 +15,7 @@ export interface CardProps {
         id: number,
         problems: string[]
         solution: string
+        views: number
         createdAt: Date
         createdBy: string
         tags: string | null
@@ -67,7 +68,7 @@ export function Card({ knowledge }: CardProps) {
             <div className='flex items-center justify-between bg-gray-50 p-4 border-t border-t-gray-100 rounded-b-2xl'>
                 <div className='flex items-center gap-1'>
                     <Eye />
-                    <span className='text-[0.8rem] text-gray-500'>40 visualizações</span>
+                    <span className='text-[0.8rem] text-gray-500'>{knowledge.views} visualizações</span>
                 </div>
                 <div className='flex items-center gap-2'>
                     <Button className='text-sky-500 hover:bg-sky-100 hover:text-sky-600 cursor-pointer' variant="ghost">Ver Detalhes</Button>

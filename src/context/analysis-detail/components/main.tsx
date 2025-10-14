@@ -11,6 +11,7 @@ import { z } from "zod/v4"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useConfirmAnalysis } from "../http/use-confirm-analysis"
+import { useEffect, useState } from "react"
 
 export interface AnalysisDetail extends FetchGetAnalysisByIdResponse { }
 
@@ -33,12 +34,24 @@ export function AnalysisDetailComponent() {
     const { id } = useParams()
     const { data, isLoading, isError } = useGetAnalysisById(Number(id))
 
+    const [isSaved, setIsSaved] = useState(true)
+
+    function handleSetIsSaved(state: boolean) {
+        setIsSaved(state)
+    }
+
     const revisionForm = useForm<RevisionSchema>({
         resolver: zodResolver(revisionSchema),
         defaultValues: {
             observation: ''
         }
     })
+
+    useEffect(() => {
+        if (data?.observation) {
+            revisionForm.reset({ observation: data.observation ?? '' });
+        }
+    }, [data, revisionForm]);
 
     const observation = revisionForm.watch('observation');
 
@@ -87,7 +100,7 @@ export function AnalysisDetailComponent() {
                 <div className="flex flex-col gap-4">
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                         <div className="lg:col-span-2 flex flex-col gap-4">
-                            <AnalysisDetail.Detail analysis={data} />
+                            <AnalysisDetail.Detail analysis={data} onIsSaved={isSaved} onSetIsSaved={handleSetIsSaved} />
                             <AnalysisDetail.Revision status={data.status} revisionForm={revisionForm} />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -97,6 +110,7 @@ export function AnalysisDetailComponent() {
                                 onReject={() => revisionForm.handleSubmit((data) => handleRevisionForm(data, 'DENIED'))()}
                                 onIsLoading={isPending}
                                 onIsDisable={observation.length < 3}
+                                onIsSaved={isSaved}
                             />
                             <AnalysisDetail.Historical />
                             <AnalysisDetail.Info analysis={data} />

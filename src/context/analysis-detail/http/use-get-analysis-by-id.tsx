@@ -8,6 +8,12 @@ export interface FetchGetAnalysisByIdResponse {
     createdBy: string
     tags: string | null
     status: 'PENDING' | 'APPROVED' | 'DENIED'
+    approvedBy: string | null
+    approvedAt: Date | null
+    deniedAt: Date | null
+    deniedBy: string | null
+    observation: string | null
+    updatedAt: Date
 }
 
 export function useGetAnalysisById(id: number) {

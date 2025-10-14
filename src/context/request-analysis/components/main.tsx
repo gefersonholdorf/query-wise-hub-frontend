@@ -35,7 +35,6 @@ export function RequestAnalysisComponent() {
     const [hasMore, setHasMore] = useState(true)
 
     const { data, isFetching, isError } = useFetchAnalysis(currentPage, filteringStatus);
-    const { data: summaryData, isFetching: summaryIsFetching } = useSummaryAnalysis()
 
     function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED') {
         if (status === filteringStatus) {
@@ -82,56 +81,23 @@ export function RequestAnalysisComponent() {
 
     return (
         <RequestAnalysis.Wrapper>
-            <header className="grid grid-cols-5 gap-10">
-                {summaryIsFetching ? (
-                    <Skeleton className='w-full h-full rounded-2xl' />
-                ) : (
-                    <>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <RequestAnalysis.Card select={filteringStatus === 'PENDING'} status='PENDING' onSetFiltering={handleSetFilteringStatus} title="Pendentes" value={String(summaryData?.totalPendings)} icon={<Clock />} color="amber" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Filtrar por solicitações pendentes.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <RequestAnalysis.Card select={filteringStatus === 'APPROVED'} status='APPROVED' onSetFiltering={handleSetFilteringStatus} title="Aprovadas" value={String(summaryData?.totalApproveds)} icon={<Check />} color="emerald" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Filtrar por solicitações aprovadas.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <RequestAnalysis.Card select={filteringStatus === 'DENIED'} status='DENIED' onSetFiltering={handleSetFilteringStatus} title="Negadas" value={String(summaryData?.totalDenieds)} icon={<X />} color="red" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Filtrar por solicitações negadas.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <RequestAnalysis.Card title="Total de Solicitações" value={String(summaryData?.total)} icon={<Calculator />} color="gray" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Quantitativo de solicitações.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <RequestAnalysis.Card title="Taxa de Aprovação" value={`${String(summaryData?.approvalRate)}%`} icon={<ChartSpline />} color="blue" />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Porcentagem de aprovação de solicitações.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </>
-                )}
-
+            <header className="flex w-full">
+                <div className='bg-gray-100 rounded-lg p-1 flex items-center gap-4'>
+                    <div className='p-2 bg-white rounded-lg'>
+                        <span className='text-sm font-medium text-gray-600'>Todas (8)</span>
+                    </div>
+                    <div className='p-2 bg-amber-50 rounded-lg'>
+                        <span className='text-sm font-medium text-amber-600'>Pendentes (5)</span>
+                    </div>
+                    <div className='p-2 bg-emerald-50 rounded-lg'>
+                        <span className='text-sm font-medium text-emerald-600'>Aprovadas (5)</span>
+                    </div>
+                    <div className='p-2 bg-red-50 rounded-lg'>
+                        <span className='text-sm font-medium text-red-600'>Negadas (5)</span>
+                    </div>
+                </div>
             </header>
-            <main className="pt-6 flex flex-col gap-4">
+            <main className="pt-6 grid grid-cols-1 gap-4">
                 {(isFetching && currentPage === 1) ? (
                     <Skeleton className="w-50 h-5" />
                 ) : (

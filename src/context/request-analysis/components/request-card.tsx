@@ -1,9 +1,10 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: <"explanation"> */
 /** biome-ignore-all assist/source/organizeImports: <"explanation"> */
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { truncatedText } from '@/helpers/truncate-text';
 import dayjs from 'dayjs';
-import { Calendar, CircleCheck, CircleX, Clock, Edit, Eye, User } from 'lucide-react';
+import { Calendar, CircleCheck, CircleX, Clock, Edit, Eye, IdCardIcon, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 dayjs.locale('pt-br');
@@ -30,12 +31,21 @@ export function RequestCard({ id, problems, solution, createdBy, createdAt, stat
 
                 <div>
                     <div>
-                        <h3 className=" text-gray-800 text-lg font-medium">
+                        <h3 className=" text-gray-800 font-medium">
                             {truncatedText({ text: problems[0], max: 80 })}
                         </h3>
                     </div>
 
                     <div className='flex items-center gap-4'>
+                        {status === 'PENDING' && <Badge className="bg-amber-100 text-amber-700 border border-amber-300">Pendente</Badge>}
+                        {status === 'APPROVED' && <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300">Aprovado</Badge>}
+                        {status === 'DENIED' && <Badge className="bg-red-100 text-red-700 border border-red-300">Negado</Badge>}
+                        <div className='flex justify-between'>
+                            <div className='flex items-center gap-1 text-gray-600'>
+                                <IdCardIcon size={14} />
+                                <span className='text-[0.8rem]'>{id}</span>
+                            </div>
+                        </div>
                         <div className='flex justify-between'>
                             <div className='flex items-center gap-1 text-gray-600'>
                                 <User size={14} />

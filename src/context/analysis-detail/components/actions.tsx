@@ -1,9 +1,9 @@
 /** biome-ignore-all assist/source/organizeImports: <"explanation"> */
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, CircleCheckBig, CircleX } from "lucide-react";
+import { AlertCircle, ArrowLeft, CircleCheckBig, CircleX } from "lucide-react";
 import { useNavigate } from "react-router";
 
 interface ActionsComponentProps {
@@ -12,9 +12,10 @@ interface ActionsComponentProps {
     onReject: () => void
     onIsLoading: boolean
     onIsDisable: boolean
+    onIsSaved: boolean
 }
 
-export function ActionsComponent({ status, onApprove, onReject, onIsLoading, onIsDisable }: ActionsComponentProps) {
+export function ActionsComponent({ status, onApprove, onReject, onIsLoading, onIsDisable, onIsSaved }: ActionsComponentProps) {
     const navigate = useNavigate()
     return (
         <Card className="p-4 py-1 shadow-[0_0_10px_5px_rgba(0,0,0,0.25)]">
@@ -28,11 +29,16 @@ export function ActionsComponent({ status, onApprove, onReject, onIsLoading, onI
                     <AccordionItem value="item-1">
                         <AccordionTrigger className="leading-none font-semibold text-[1rem]">Ações</AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-balance">
+                            {!onIsSaved && (
+                                <div className="w-full p-2 border border-amber-200 rounded-lg bg-amber-50">
+                                    <span className="text-sm text-amber-700 flex items-center gap-2"><AlertCircle />Salve as alterações efetuadas na análise para prosseguir com a revisão.</span>
+                                </div>
+                            )}
                             {status === 'PENDING' ? (
                                 <div className="flex flex-col gap-2">
                                     <Button
                                         className="cursor-pointer text-white bg-emerald-500 hover:bg-emerald-600 hover:text-white"
-                                        disabled={onIsLoading || onIsDisable}
+                                        disabled={onIsLoading || onIsDisable || !onIsSaved}
                                         onClick={() => onApprove()}
                                     >
                                         <CircleCheckBig className="text-white" />
@@ -41,7 +47,7 @@ export function ActionsComponent({ status, onApprove, onReject, onIsLoading, onI
 
                                     <Button
                                         className="cursor-pointer text-red-500 border border-red-500 hover:text-red-500 hover:bg-red-50"
-                                        disabled={onIsLoading || onIsDisable}
+                                        disabled={onIsLoading || onIsDisable || !onIsSaved}
                                         onClick={() => onReject()}
                                         variant="outline"
                                     >
