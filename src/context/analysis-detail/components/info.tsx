@@ -23,11 +23,11 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                 </div>
                 <div className="flex flex-col gap-1">
                     <span className="text-sm text-gray-600">Criado em</span>
-                    <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.createdAt).format('DD/MM/YYYY HH:MM')}</span>
+                    <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.createdAt).format('DD/MM/YYYY HH:mm')}</span>
                 </div>
                 <div className="flex flex-col gap-1">
                     <span className="text-sm text-gray-600">Atualizado em</span>
-                    <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.updatedAt).format('DD/MM/YYYY HH:MM')}</span>
+                    <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.updatedAt).format('DD/MM/YYYY HH:mm')}</span>
                 </div>
                 <div className="flex flex-col gap-1">
                     <span className="text-sm text-gray-600">Status</span>
@@ -53,7 +53,7 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                     <>
                         <div className="flex flex-col gap-1">
                             <span className="text-sm text-gray-600">Aprovado em</span>
-                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.approvedAt).format('DD/MM/YYYY HH:MM')}</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.approvedAt).format('DD/MM/YYYY HH:mm')}</span>
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-sm text-gray-600">Aprovado por</span>
@@ -65,7 +65,7 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                     <>
                         <div className="flex flex-col gap-1">
                             <span className="text-sm text-gray-600">Negado em</span>
-                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.deniedAt).format('DD/MM/YYYY HH:MM')}</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{dayjs(analysis.deniedAt).format('DD/MM/YYYY HH:mm')}</span>
                         </div>
                         <div className="flex flex-col gap-1">
                             <span className="text-sm text-gray-600">Negado por</span>

@@ -16,31 +16,15 @@ dayjs.locale('pt-br')
 interface Historical {
     id: number
     action: string
-    date: Date
-    status?: 'PENDING' | 'APPROVED' | 'DENIED'
+    dateAt: Date
+    status: 'PENDING' | 'APPROVED' | 'DENIED' | null
 }
 
-const history: Historical[] = [
-    {
-        id: 1,
-        action: 'Criado por Sophia Clark',
-        date: new Date('2024-07-26'),
-    },
-    {
-        id: 2,
-        action: 'Revisado por Marcos Silva',
-        date: new Date('2024-07-27'),
-        status: 'DENIED',
-    },
-    {
-        id: 3,
-        action: 'Revisado por Ana Torres',
-        date: new Date('2024-07-28'),
-        status: 'APPROVED',
-    },
-];
+interface HistoricalComponentProps {
+    stockHistory: Historical[]
+}
 
-export function HistoricalComponent() {
+export function HistoricalComponent({ stockHistory }: HistoricalComponentProps) {
     return (
         <Card className="px-4 py-1 shadow-[0_0_10px_5px_rgba(0,0,0,0.25)]">
             <CardContent className="p-0">
@@ -53,7 +37,7 @@ export function HistoricalComponent() {
                     <AccordionItem value="item-1">
                         <AccordionTrigger className="leading-none font-semibold text-[1rem]">Histórico de Ações</AccordionTrigger>
                         <AccordionContent className="flex flex-col gap-4 text-balance">
-                            {history.map((item, index) => {
+                            {stockHistory.map((item, index) => {
                                 return (
                                     <div key={item.id} className="flex gap-2 items-stretch">
                                         <div className="flex flex-col items-center">
@@ -62,7 +46,7 @@ export function HistoricalComponent() {
                                         </div>
                                         <div className={`flex flex-col gap-1 p-2 rounded-lg items-start ${index === 0 && 'border w-full bg-gray-100'}`}>
                                             <span className="text-sm font-semibold text-gray-800">{item.action}</span>
-                                            <span className="text-sm text-sky-800">{dayjs(item.date).format('DD/MM/YYYY HH:MM')}</span>
+                                            <span className="text-sm text-sky-800">{dayjs(item.dateAt).format('DD/MM/YYYY HH:mm')}</span>
                                             {item.status === 'PENDING' && <Badge className="bg-amber-100 text-amber-700 border border-amber-300"><Clock />Pendente</Badge>}
                                             {item.status === 'APPROVED' && <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-300"><CircleCheck />Aprovado</Badge>}
                                             {item.status === 'DENIED' && <Badge className="bg-red-100 text-red-700 border border-red-300"><CircleX />Negado</Badge>}

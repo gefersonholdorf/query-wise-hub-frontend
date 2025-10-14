@@ -112,7 +112,7 @@ export function AnalysisDetailComponent() {
                                 onIsDisable={observation.length < 3}
                                 onIsSaved={isSaved}
                             />
-                            <AnalysisDetail.Historical />
+                            <AnalysisDetail.Historical stockHistory={data.stockHistory} />
                             <AnalysisDetail.Info analysis={data} />
                         </div>
                     </div>

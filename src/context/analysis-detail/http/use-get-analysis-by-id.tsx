@@ -14,6 +14,12 @@ export interface FetchGetAnalysisByIdResponse {
     deniedBy: string | null
     observation: string | null
     updatedAt: Date
+    stockHistory: {
+        id: number,
+        action: string,
+        status: "PENDING" | "APPROVED" | "DENIED" | null,
+        dateAt: Date,
+    }[]
 }
 
 export function useGetAnalysisById(id: number) {
