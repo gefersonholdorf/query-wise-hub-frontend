@@ -1,16 +1,24 @@
 /** biome-ignore-all lint/correctness/useUniqueElementIds: <"explanation"> */
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: <"explanation"> */
 /** biome-ignore-all assist/source/organizeImports: <"explanation"> */
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Calculator, ChartSpline, Check, Clock, Loader, X } from "lucide-react";
+import { ErrorLoading } from '@/components/error-loading';
+import { Skeleton } from '@/components/ui/skeleton';
+import { CircleCheck, CircleX, Clock, Eye, Loader, Search } from "lucide-react";
+import { useState } from 'react';
+import { useFetchAnalysis } from '../http/use-fetch-analysis';
 import { CardComponent } from "./card";
 import { RequestCard } from "./request-card";
 import { Wrapper } from "./wrapper";
-import { useEffect, useRef, useState } from 'react';
-import { useFetchAnalysis } from '../http/use-fetch-analysis';
-import { Skeleton } from '@/components/ui/skeleton';
-import { ErrorLoading } from '@/components/error-loading';
-import { useSummaryAnalysis } from '../http/use-summary-analysis';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import dayjs from 'dayjs';
+import { truncatedText } from '@/helpers/truncate-text';
+import { Badge } from '@/components/ui/badge';
+import { useNavigate, useSearchParams } from 'react-router';
+import { PaginationComponent } from '@/components/pagination';
+import { da } from 'zod/v4/locales';
 
 export const RequestAnalysis = {
     Wrapper: Wrapper,
@@ -29,107 +37,183 @@ export interface Analysys {
 }
 
 export function RequestAnalysisComponent() {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [analysis, setAnalysis] = useState<Analysys[]>([]);
-    const [filteringStatus, setFilteringStatus] = useState<'PENDING' | 'APPROVED' | 'DENIED'>('PENDING')
-    const [hasMore, setHasMore] = useState(true)
+    const [filteringStatus, setFilteringStatus] = useState<'PENDING' | 'APPROVED' | 'DENIED' | undefined>(undefined)
 
-    const { data, isFetching, isError } = useFetchAnalysis(currentPage, filteringStatus);
+    const navigate = useNavigate()
 
-    function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED') {
+    const [searchParams] = useSearchParams();
+
+    const page = Number(searchParams.get("page")) || 1;
+    const totalPerPage = Number(searchParams.get("totalPerPage")) || 10;
+
+    const { data, isLoading, isError } = useFetchAnalysis(page, filteringStatus, totalPerPage);
+
+    function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED' | undefined) {
         if (status === filteringStatus) {
             return
         }
-        setHasMore(true)
-        setAnalysis([])
-        setCurrentPage(1)
+
         setFilteringStatus(status)
     }
-
-    useEffect(() => {
-        if (data?.data) {
-            setAnalysis(prev => [...prev, ...data.data]);
-            if (data.data.length === 0) {
-                setHasMore(false);
-                if (currentPage === 1) {
-                    setAnalysis([])
-                }
-            }
-        }
-    }, [data]);
-
-    const sentinelRef = useRef<HTMLDivElement | null>(null);
-
-    useEffect(() => {
-        if (!sentinelRef.current) return;
-
-        const observer = new IntersectionObserver(entries => {
-            if (entries.some(entry => entry.isIntersecting) && !isFetching) {
-                setCurrentPage(prev => prev + 1);
-            }
-        }, {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        });
-
-        observer.observe(sentinelRef.current);
-        return () => observer.disconnect();
-    }, [isFetching]);
 
     if (isError) return <ErrorLoading />;
 
     return (
         <RequestAnalysis.Wrapper>
-            <header className="flex w-full">
-                <div className='bg-gray-100 rounded-lg p-1 flex items-center gap-4'>
-                    <div className='p-2 bg-white rounded-lg'>
-                        <span className='text-sm font-medium text-gray-600'>Todas (8)</span>
+            <header className="grid grid-cols-1 lg:grid-cols-2 w-full gap-4">
+                <div className='bg-gray-50 rounded-lg p-2 px-6 flex items-center gap-4 border border-gray-100'>
+                    <div
+                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === undefined ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-600'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        onClick={() => handleSetFilteringStatus(undefined)}
+                    >
+                        <span>Todos (5)</span>
                     </div>
-                    <div className='p-2 bg-amber-50 rounded-lg'>
-                        <span className='text-sm font-medium text-amber-600'>Pendentes (5)</span>
+                    <div
+                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'PENDING' ? 'bg-amber-50 text-amber-600 border border-amber-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        onClick={() => handleSetFilteringStatus('PENDING')}
+                    >
+                        <span>Pendentes (5)</span>
                     </div>
-                    <div className='p-2 bg-emerald-50 rounded-lg'>
-                        <span className='text-sm font-medium text-emerald-600'>Aprovadas (5)</span>
+                    <div
+                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'APPROVED' ? 'bg-emerald-50 text-emerald-600 border border-emerald-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        onClick={() => handleSetFilteringStatus('APPROVED')}
+                    >
+                        <span>Aprovadas (5)</span>
                     </div>
-                    <div className='p-2 bg-red-50 rounded-lg'>
-                        <span className='text-sm font-medium text-red-600'>Negadas (5)</span>
+                    <div
+                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'DENIED' ? 'bg-red-50 text-red-600 border border-red-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        onClick={() => handleSetFilteringStatus('DENIED')}
+                    >
+                        <span>Negadas (5)</span>
                     </div>
+                </div>
+                <div className="relative w-full flex items-center">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <Input
+                        placeholder="Buscar por título..."
+                        className="pl-10 h-12 bg-gray-50 shadow-sm focus-visible:ring-0 focus:outline-sky-500
+                            focus:shadow-none border-2 focus:border-sky-500 text-gray-600 rounded-2xl"
+                    />
                 </div>
             </header>
             <main className="pt-6 grid grid-cols-1 gap-4">
-                {(isFetching && currentPage === 1) ? (
-                    <Skeleton className="w-50 h-5" />
-                ) : (
-                    <span className="text-sm text-gray-600">{analysis.length} solicitação(ões) encontrada(s)</span>
-                )}
+                <Card className="py-3 gap-4 px-4">
+                    <CardContent className="px-0">
+                        <ul className="grid grid-cols-[50px_1fr_150px_150px_120px_60px] px-4 py-2 text-sm text-gray-600 border-b">
+                            <li>Id</li>
+                            <li>Problema</li>
+                            <li>Data de Criação</li>
+                            <li>Criado por</li>
+                            <li>Status</li>
+                            <li>Ação</li>
+                        </ul>
 
-                {(isFetching && currentPage === 1) ? (
-                    <div>
-                        {Array.from({ length: 10 }).map((_, index) => (
-                            <Skeleton key={index.toFixed()} className="w-full h-60 mb-4" />
-                        ))}
-                    </div>
-                ) : analysis.map(item => (
-                    <RequestAnalysis.RequestCard
-                        key={item.id}
-                        id={item.id}
-                        problems={item.problems}
-                        solution={item.solution}
-                        createdAt={item.createdAt}
-                        createdBy={item.createdBy}
-                        status={item.status}
-                    />
-                ))}
+                        {isLoading && (
+                            <ul>
+                                {Array.from({ length: 5 }, (_, i) => (
+                                    <li
+                                        key={i.toString()}
+                                        className="grid grid-cols-[50px_1fr_150px_150px_120px_60px] items-center gap-2 px-4 py-2 animate-pulse text-sm text-gray-400"
+                                    >
+                                        <span className="bg-gray-300 w-50 h-10 rounded inline-block"></span>
+                                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
 
-                {isFetching && currentPage > 1 && (
-                    <div className="flex items-center justify-center gap-2 text-gray-500">
-                        <Loader className="animate-spin h-5 w-5 text-blue-500" />
-                        <span className='text-sm text-gray-600'>Buscando mais itens...</span>
-                    </div>
-                )}
-
-                {hasMore ? <div ref={sentinelRef}></div> : <div className="text-sm text-gray-600 w-full flex items-center justify-center">Todos os resultados foram carregados</div>}
+                        {data && (
+                            <>
+                                {data.data.length === 0 ? (
+                                    <div className="flex h-full flex-col items-center justify-center p-6 pt-10 space-y-3">
+                                        <p>Nenhum dado...</p>
+                                    </div>
+                                ) : (
+                                    <ul>
+                                        {data.data.map((item) => (
+                                            <li
+                                                key={item.id}
+                                                className="grid grid-cols-[50px_1fr_150px_150px_120px_60px] items-center px-4 py-2 border-t text-sm text-gray-800 hover:transition hover:bg-gray-100"
+                                            >
+                                                <span>{item.id}</span>
+                                                <Tooltip>
+                                                    <TooltipTrigger className="flex justify-start">
+                                                        <span className="font-semibold">
+                                                            {truncatedText({ text: item.problems[0], max: 60 })}
+                                                        </span>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        <p>{item.problems[0]}</p>
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                                <span>{dayjs(new Date(item.createdAt)).format('DD/MM/YYYY HH:mm')}</span>
+                                                <span>{item.createdBy}</span>
+                                                <span>
+                                                    {item.status === 'PENDING' && (
+                                                        <Badge className="bg-amber-500">
+                                                            <Clock /> Pendente
+                                                        </Badge>
+                                                    )}
+                                                    {item.status === 'APPROVED' && (
+                                                        <Badge className="bg-emerald-500">
+                                                            <CircleCheck /> Aprovado
+                                                        </Badge>
+                                                    )}
+                                                    {item.status === 'DENIED' && (
+                                                        <Badge className="bg-red-500">
+                                                            <CircleX /> Negado
+                                                        </Badge>
+                                                    )}
+                                                </span>
+                                                <span>
+                                                    {item.status === 'PENDING' ? (
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    onClick={() => navigate(`/analysis/${item.id}`)}
+                                                                >
+                                                                    <Search />
+                                                                </Button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>Revisar Análise.</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                                <Button
+                                                                    variant="outline"
+                                                                    onClick={() => navigate(`/analysis/${item.id}`)}
+                                                                >
+                                                                    <Eye />
+                                                                </Button>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent>
+                                                                <p>Visualizar Análise.</p>
+                                                            </TooltipContent>
+                                                        </Tooltip>
+                                                    )}
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </>
+                        )}
+                    </CardContent>
+                    {isLoading && (
+                        <span className="bg-gray-300 h-10 rounded inline-block"></span>
+                    )}
+                    {data && (
+                        <PaginationComponent page={data.page} total={data.total} totalPage={data.totalPage} component='analysis' />
+                    )}
+                </Card>
             </main>
         </RequestAnalysis.Wrapper>
     )

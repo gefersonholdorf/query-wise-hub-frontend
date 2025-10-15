@@ -61,7 +61,7 @@ export function RequestCard({ id, problems, solution, createdBy, createdAt, stat
             </div>
 
             {status === 'PENDING' && <Button className='bg-sky-500 hover:bg-sky-600' onClick={() => navigate(`/analysis/${id}`)}><Edit />Revisar Análise</Button>}
-            {status !== 'PENDING' && <Button variant="outline" onClick={() => navigate(`/analysis/${id}`)}><Eye />Revisar Análise</Button>}
+            {status !== 'PENDING' && <Button variant="outline" onClick={() => navigate(`/analysis/${id}`)}><Eye />Visualizar Análise</Button>}
         </div >
     )
 }

@@ -33,9 +33,9 @@ export function DashboardComponent() {
                     </TooltipContent>
                 </Tooltip>
                 {isLoading && (
-                    <div className="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 justify-center w-full gap-4">
                         {Array.from({ length: 12 }).map((_, i) => (
-                            <span key={i.toString()} className="bg-gray-200 rounded w-50 inline-block"></span>
+                            <span key={i.toString()} className="bg-gray-200 rounded inline-block"></span>
                         ))}
                     </div>
                 )}

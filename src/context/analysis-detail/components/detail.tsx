@@ -178,7 +178,7 @@ export function DetailComponent({ analysis, onIsSaved, onSetIsSaved }: DetailCom
                             {...updateForm.register("solution")}
                         />
                     </div>
-                    {!onIsSaved && (
+                    {(!onIsSaved && analysis.status === 'PENDING') && (
                         <Button
                             type="submit"
                             className="w-full bg-sky-500 hover:bg-sky-600 cursor-pointer"

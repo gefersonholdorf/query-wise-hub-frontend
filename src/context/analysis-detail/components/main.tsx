@@ -94,7 +94,19 @@ export function AnalysisDetailComponent() {
     return (
         <AnalysisDetail.Wrapper>
             {isLoading && (
-                <div>Carregando...</div>
+                <div className="flex flex-col gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div className="lg:col-span-2 flex flex-col gap-4">
+                            <span className="bg-gray-200 w-full h-200 rounded inline-block"></span>
+                            <span className="bg-gray-200 w-full h-full rounded inline-block"></span>
+                        </div>
+                        <div className="flex flex-col gap-4">
+                            <span className="bg-gray-200 w-full h-full rounded inline-block"></span>
+                            <span className="bg-gray-200 w-full h-full rounded inline-block"></span>
+                            <span className="bg-gray-200 w-full h-full rounded inline-block"></span>
+                        </div>
+                    </div>
+                </div>
             )}
             {data && (
                 <div className="flex flex-col gap-4">
@@ -112,8 +124,8 @@ export function AnalysisDetailComponent() {
                                 onIsDisable={observation.length < 3}
                                 onIsSaved={isSaved}
                             />
-                            <AnalysisDetail.Historical stockHistory={data.stockHistory} />
                             <AnalysisDetail.Info analysis={data} />
+                            <AnalysisDetail.Historical stockHistory={data.stockHistory} />
                         </div>
                     </div>
                 </div>

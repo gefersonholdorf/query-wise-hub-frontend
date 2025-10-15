@@ -12,7 +12,7 @@ import { useNavigate } from "react-router";
 dayjs.locale('pt-br');
 
 export function AnalysisPendingComponent() {
-    const { data, isLoading, isError } = useFetchAnalysis(1, 'PENDING')
+    const { data, isLoading, isError } = useFetchAnalysis(1, 'PENDING', 5)
     const navigate = useNavigate()
     return (
         <Card className="py-3 gap-4">

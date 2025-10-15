@@ -12,15 +12,22 @@ export interface FetchAnalysisResponse {
     }[]
     total: number
     page: number
+    totalPage: number
     totalPerPage: number
 }
 
-export function useFetchAnalysis(page: number, status: 'PENDING' | 'APPROVED' | 'DENIED') {
+export function useFetchAnalysis(page: number, status: 'PENDING' | 'APPROVED' | 'DENIED' | undefined, totalPerPage: number) {
     return useQuery({
         queryKey: ['analysis', page, status],
         queryFn: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
-            const res = await fetch(`${apiUrl}/api/v1/analysis?page=${page}&&totalPerPage=5&&status=${status}`)
+
+            const params = new URLSearchParams();
+            if (page !== undefined) params.append('page', page.toString());
+            if (status !== undefined) params.append('status', status.toString());
+            if (totalPerPage !== undefined) params.append('totalPerPage', totalPerPage.toString());
+
+            const res = await fetch(`${apiUrl}/api/v1/analysis?${params.toString()}`)
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar análises")

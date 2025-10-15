@@ -40,7 +40,7 @@ export function Card({ knowledge }: CardProps) {
                     if (index <= 1) {
                         return <div key={index.toString()} className='flex items-center gap-1'>
                             <Bug size={15} className='text-orange-500' />
-                            <span className='text-[0.8rem] text-gray-500'>{truncatedText({ text: problem, max: 40 })}</span>
+                            <span className='text-[0.9rem] text-gray-600'>{truncatedText({ text: problem, max: 40 })}</span>
                         </div>
                     }
 
@@ -51,12 +51,12 @@ export function Card({ knowledge }: CardProps) {
                 )}
             </div>
             <div className="px-4 mt-2 min-h-15">
-                <span className="text-sm font-medium text-gray-500 flex items-center gap-1">
+                <span className="text-sm font-medium text-gray-600 flex items-center gap-1">
                     SOLUÇÃO
                 </span>
                 <Tooltip>
                     <TooltipTrigger className='text-start'>
-                        <p className="text-[0.85rem] text-gray-700 mt-1">
+                        <p className="text-[0.8rem] text-gray-700 mt-1">
                             {truncatedText({ text: knowledge.solution, max: 80 })}
                         </p>
                     </TooltipTrigger>
