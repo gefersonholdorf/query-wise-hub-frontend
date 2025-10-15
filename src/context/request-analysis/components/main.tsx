@@ -41,19 +41,30 @@ export function RequestAnalysisComponent() {
 
     const navigate = useNavigate()
 
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || 1;
-    const totalPerPage = Number(searchParams.get("totalPerPage")) || 10;
+    const totalPerPage = Number(searchParams.get("totalPerPage")) || 2;
 
     const { data, isLoading, isError } = useFetchAnalysis(page, filteringStatus, totalPerPage);
 
+
     function handleSetFilteringStatus(status: 'PENDING' | 'APPROVED' | 'DENIED' | undefined) {
-        if (status === filteringStatus) {
-            return
+        if (status === filteringStatus) return;
+
+        setFilteringStatus(status);
+
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (!status) {
+            params.delete("status");
+        } else {
+            params.set("status", status);
         }
 
-        setFilteringStatus(status)
+        params.set("page", "1");
+
+        setSearchParams(params);
     }
 
     if (isError) return <ErrorLoading />;
@@ -211,7 +222,7 @@ export function RequestAnalysisComponent() {
                         <span className="bg-gray-300 h-10 rounded inline-block"></span>
                     )}
                     {data && (
-                        <PaginationComponent page={data.page} total={data.total} totalPage={data.totalPage} component='analysis' />
+                        <PaginationComponent page={data.page} total={data.total} pageSize={data.pageSize} totalPages={data.totalPages} component='analysis' maxVisible={5} />
                     )}
                 </Card>
             </main>

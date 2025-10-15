@@ -12,7 +12,8 @@ export interface FetchAnalysisResponse {
     }[]
     total: number
     page: number
-    totalPage: number
+    pageSize: number
+    totalPages: number
     totalPerPage: number
 }
 

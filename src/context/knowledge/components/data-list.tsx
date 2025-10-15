@@ -32,7 +32,7 @@ export function DataList() {
                 )
                 )}
             </div>
-            <PaginationComponent component="knowledge" page={data.page} total={data.total} totalPage={data.totalPage} />
+            <PaginationComponent component="knowledge" page={data.page} total={data.total} pageSize={data.totalPage} totalPages={5} />
         </div >
     );
 }
