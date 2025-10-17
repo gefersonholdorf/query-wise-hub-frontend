@@ -5,7 +5,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { truncatedText } from '@/helpers/truncate-text';
 import dayjs from 'dayjs';
-import { Bug, Calendar, Circle, EllipsisVertical, Eye, Library, ListCheck, ListChecks, MessageCircle, MessageSquare, MessageSquareCode, SquarePen, Tag, Trash2, User } from 'lucide-react';
+import { AlertCircle, Bug, Calendar, Circle, EllipsisVertical, Eye, Library, ListCheck, ListChecks, MessageCircle, MessageSquare, MessageSquareCode, SquarePen, Tag, Trash2, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 dayjs.locale('pt-br');
@@ -28,9 +28,9 @@ export function Card({ knowledge }: CardProps) {
 
     return (
         <div
-            className="group flex flex-col justify-between border border-gray-200 h-75 gap-1 bg-white rounded-xl transition-all duration-300 transform hover:scale-[1.01] shadow-[0_4px_20px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_28px_rgba(0,0,0,0.25)] relative overflow-hidden p-4"
+            className="group flex flex-col justify-between border border-gray-200 h-70 gap-1 bg-white rounded-xl transition-all duration-300 transform hover:scale-[1.01] shadow-[0_2px_5px_rgba(0,0,0,0.15)] hover:shadow-[0_6px_28px_rgba(0,0,0,0.25)] relative overflow-hidden p-4"
         >
-            <div className='border-b border-b-gray-100 rounded-t-2xl flex flex-col gap-2 pb-4'>
+            <div className='rounded-t-2xl flex flex-col gap-2 pb-4'>
                 <div className='px-4 flex items-center justify-between gap-4'>
                     <div className='flex items-center gap-2'>
                         <h3 className=" text-gray-800 font-semibold  flex items-center gap-2">{truncatedText({ text: knowledge.problems[0], max: 50 })}</h3>
@@ -40,25 +40,26 @@ export function Card({ knowledge }: CardProps) {
                     </div>
                 </div>
                 <div className='flex items-center px-4 gap-2'>
-                    <Circle className='text-sky-600' size={15} />
-                    <span className='text-sm text-gray-700'>{knowledge.problems.length} problemas </span>
+                    <AlertCircle className='text-sky-600' size={15} />
+                    <span className='text-sm text-gray-700'>{knowledge.problems.length} problemas cadastrados.</span>
+                </div>
+                <div className="px-4 mt-2 min-h-15 rounded-sm p-2">
+                    <span className="text-sm font-medium text-gray-600 flex items-center gap-1">
+                        SOLUÇÃO
+                    </span>
+                    <Tooltip>
+                        <TooltipTrigger className='text-start w-full'>
+                            <p className="text-[0.8rem] text-gray-700 mt-1 block w-full">
+                                {truncatedText({ text: knowledge.solution, max: 80 })}
+                            </p>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{knowledge.solution}</p>
+                        </TooltipContent>
+                    </Tooltip>
                 </div>
             </div>
-            <div className="px-4 mt-2 min-h-15 border border-gray-200 bg-gray-50 rounded-sm p-2">
-                <span className="text-sm font-medium text-gray-600 flex items-center gap-1">
-                    SOLUÇÃO
-                </span>
-                <Tooltip>
-                    <TooltipTrigger className='text-start w-full'>
-                        <p className="text-[0.8rem] text-gray-700 mt-1 block w-full">
-                            {truncatedText({ text: knowledge.solution, max: 80 })}
-                        </p>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                        <p>{knowledge.solution}</p>
-                    </TooltipContent>
-                </Tooltip>
-            </div>
+
             <div className='flex items-center justify-between p-4 border-t border-t-gray-100 rounded-b-2xl'>
                 <div className='flex items-center gap-4'>
                     <div className='flex items-center gap-2'>

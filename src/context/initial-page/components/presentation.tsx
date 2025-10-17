@@ -1,6 +1,6 @@
+/** biome-ignore-all assist/source/organizeImports: <"explanation"> */
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import dayjs from "dayjs";
 import { Plus, Search } from "lucide-react";
 
 export function PresentationComponent() {

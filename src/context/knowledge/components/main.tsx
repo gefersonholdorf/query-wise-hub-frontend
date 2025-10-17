@@ -10,7 +10,7 @@ export const Knowledge = {
 
 export function KnowledgeComponent() {
     return (
-        <main className="rounded-lg p-6 bg-white w-full flex flex-col gap-6 justify-between mt-2 shadow-[0_0_10px_5px_rgba(0,0,0,0.25)]">
+        <main className="rounded-lg p-6 bg-gray-50 w-full flex flex-col gap-6 justify-between mt-2 shadow-[0_0_10px_5px_rgba(0,0,0,0.25)]">
             <Knowledge.Filtering />
             <Knowledge.DataList />
         </main>
