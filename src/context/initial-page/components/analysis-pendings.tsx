@@ -15,7 +15,7 @@ export function AnalysisPendingComponent() {
     const { data, isLoading, isError } = useFetchAnalysis(1, 'PENDING', 5)
     const navigate = useNavigate()
     return (
-        <Card className="py-3 gap-4">
+        <Card className="py-3 gap-4 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow">
             <div className="flex items-center justify-between px-4 py-1">
                 <div className="flex flex-col gap-2">
                     <CardTitle className="flex items-center justify-between">
@@ -29,7 +29,7 @@ export function AnalysisPendingComponent() {
 
                     </div>
                 </div>
-                <Button onClick={() => navigate('/request-analysis')} className="bg-sky-500 hover:bg-sky-400 p-2">Ver Todas</Button>
+                <Button onClick={() => navigate('/analysis?page=1')} className="bg-sky-500 hover:bg-sky-400 p-2 cursor-pointer"><Search />Ver Todas</Button>
             </div>
             <CardContent className="px-0">
                 <ul className="grid grid-cols-[1fr_150px_120px_60px] px-4 py-2 text-sm text-gray-600 border-t border-b">
@@ -116,6 +116,7 @@ export function AnalysisPendingComponent() {
                                                 <TooltipTrigger asChild>
                                                     <Button
                                                         variant="outline"
+                                                        className="cursor-pointer"
                                                         onClick={() => navigate(`/analysis/${item.id}`)}
                                                     >
                                                         <Search />

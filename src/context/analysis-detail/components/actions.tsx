@@ -34,6 +34,11 @@ export function ActionsComponent({ status, onApprove, onReject, onIsLoading, onI
                                     <span className="text-sm text-amber-700 flex items-center gap-2"><AlertCircle />Salve as alterações efetuadas na análise para prosseguir com a revisão.</span>
                                 </div>
                             )}
+                            {onIsDisable && (
+                                <div className="w-full p-2 border border-amber-200 rounded-lg bg-amber-50">
+                                    <span className="text-sm text-amber-700 flex items-center gap-2"><AlertCircle />Informe uma descrição na revisão para prosseguir com a aprovação ou rejeição da análise.</span>
+                                </div>
+                            )}
                             {status === 'PENDING' ? (
                                 <div className="flex flex-col gap-2">
                                     <Button

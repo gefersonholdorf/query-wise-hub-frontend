@@ -9,7 +9,7 @@ import {
 import dayjs from "dayjs";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
-import { CircleCheck, CircleX, Clock } from "lucide-react";
+import { CircleCheck, CircleX, Clock, FileCheck, Pencil, Plus } from "lucide-react";
 
 dayjs.locale('pt-br')
 
@@ -41,7 +41,9 @@ export function HistoricalComponent({ stockHistory }: HistoricalComponentProps) 
                                 return (
                                     <div key={item.id} className="flex gap-2 items-stretch">
                                         <div className="flex flex-col items-center">
-                                            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                                            {item.action.includes('Atualizado por') && (<Pencil size={15} className="text-sky-500" />)}
+                                            {item.action.includes('Criado por') && (<Plus size={15} className="text-sky-500" />)}
+                                            {item.action.includes('revisada por') && (<FileCheck size={15} className="text-sky-500" />)}
                                             <Separator orientation="vertical" className="flex-1" />
                                         </div>
                                         <div className={`flex flex-col gap-1 p-2 rounded-lg items-start ${index === 0 && 'border w-full bg-gray-100'}`}>

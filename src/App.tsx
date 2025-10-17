@@ -9,6 +9,7 @@ import { RequestAnalysisPage } from "./pages/request-analysis";
 import { ChatPage } from "./pages/chat";
 import { DashboardPage } from "./pages/dashboard";
 import { AnalysisDetailPage } from "./pages/analysis-detail";
+import { InitialPage } from "./pages/initial-page";
 
 const queryClient = new QueryClient()
 
@@ -23,6 +24,7 @@ export function App() {
             <Route path="/knowledge/:id" element={<KnowledgeDetailPage />} />
             <Route path="/analysis" element={<RequestAnalysisPage />} />
             <Route path="/chat" element={<ChatPage />} />
+            <Route path="/initial-page" element={<InitialPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/analysis/:id" element={<AnalysisDetailPage />} />
           </Route>

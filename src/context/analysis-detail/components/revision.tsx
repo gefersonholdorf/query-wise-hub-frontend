@@ -25,7 +25,7 @@ export function RevisionComponent({ status, revisionForm }: RevisionComponentPro
                             <p>Adicione observações detalhadas sobre sua decisão de aprovação ou rejeição. Estas informações ajudarão a manter um histórico claro das revisões. Para deixar a revisão salva, lembre-se de aprovar ou rejeitar a análise.</p>
                         </TooltipContent>
                     </Tooltip>
-                    <span className="text-sm text-gray-600">Descrição da Revisão *</span>
+                    <span className="text-sm text-gray-600">Descrição da Revisão <span className="text-red-500">*</span></span>
                 </div>
                 <Textarea
                     className='border p-2 rounded-sm bg-gray-50 break-all whitespace-pre-wrap overflow-x-hidden resize-y w-full min-h-30'

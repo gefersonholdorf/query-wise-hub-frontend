@@ -2,7 +2,7 @@
 /** biome-ignore-all lint/correctness/noUnusedVariables: <"explanation"> */
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { Book, BookmarkCheck, BookmarkX, Calculator, ChartSpline, Check, Clock, Eye, TicketSlash, User2, X } from "lucide-react"
-import { AnalysisPendingComponent } from "./analysis-pendings"
+import { AnalysisPendingComponent } from "../../initial-page/components/analysis-pendings"
 import { CardComponent } from "./card"
 import { ChartLineAnalysis } from "./chart-line-analysis"
 import { ChartLineDots } from "./chart-line-dots"
@@ -11,6 +11,7 @@ import { TopViewsKnowledges } from "./top-views-knowledges"
 import { Wrapper } from "./wrapper"
 import { useSummaryDashboard } from "../http/use-summary-dashboard"
 import { Button } from "@/components/ui/button"
+import { ChartPieInteractive } from "./pie-chart-interactive"
 
 
 export const Dashboard = {
@@ -160,7 +161,7 @@ export function DashboardComponent() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <ChartLineDots />
-                <AnalysisPendingComponent />
+                <ChartPieInteractive />
                 <TopViewsKnowledges />
                 <ChartLineAnalysis />
             </div>

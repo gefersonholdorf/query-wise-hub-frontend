@@ -2,10 +2,12 @@
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import type { AnalysisDetail } from "./main";
 import dayjs from "dayjs";
+import duration from "dayjs/plugin/duration"
 import { Badge } from "@/components/ui/badge";
 import { CircleCheck, CircleX, Clock } from "lucide-react";
 
 dayjs.locale('pt-br');
+dayjs.extend(duration)
 
 interface InfoComponentProps {
     analysis: AnalysisDetail
@@ -13,6 +15,22 @@ interface InfoComponentProps {
 
 export function InfoComponent({ analysis }: InfoComponentProps) {
     const tags = analysis.tags?.split(', ')
+
+    const date = analysis.approvedAt ?? analysis.deniedAt
+
+    const diffMs = dayjs(date).diff(dayjs(analysis.createdAt)) ?? 0
+    const diffDuration = dayjs.duration(diffMs)
+
+    let analysisTime = ""
+
+    if (diffDuration.asDays() >= 1) {
+        analysisTime = `${Math.floor(diffDuration.asDays())}d`
+    } else if (diffDuration.asHours() >= 1) {
+        analysisTime = `${Math.floor(diffDuration.asHours())}h`
+    } else {
+        analysisTime = `${Math.floor(diffDuration.asMinutes())}min`
+    }
+
     return (
         <Card className="p-4 shadow-[0_0_10px_5px_rgba(0,0,0,0.25)]">
             <CardTitle>Informações</CardTitle>
@@ -59,6 +77,10 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                             <span className="text-sm text-gray-600">Aprovado por</span>
                             <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysis.approvedBy}</span>
                         </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Tempo de Análise</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysisTime}</span>
+                        </div>
                     </>
                 )}
                 {analysis.status === 'DENIED' && (
@@ -70,6 +92,10 @@ export function InfoComponent({ analysis }: InfoComponentProps) {
                         <div className="flex flex-col gap-1">
                             <span className="text-sm text-gray-600">Negado por</span>
                             <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysis.deniedBy}</span>
+                        </div>
+                        <div className="flex flex-col gap-1">
+                            <span className="text-sm text-gray-600">Tempo de Análise</span>
+                            <span className="text-sm text-gray-800 bg-gray-50 p-1 rounded-lg pl-2 font-medium">{analysisTime}</span>
                         </div>
                     </>
                 )}

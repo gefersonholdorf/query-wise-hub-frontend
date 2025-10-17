@@ -37,6 +37,9 @@ export function AnalysisDetailComponent() {
     const [isSaved, setIsSaved] = useState(true)
 
     function handleSetIsSaved(state: boolean) {
+        if (data?.status !== 'PENDING') {
+            return
+        }
         setIsSaved(state)
     }
 

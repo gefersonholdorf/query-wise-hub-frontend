@@ -44,7 +44,7 @@ export function RequestAnalysisComponent() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const page = Number(searchParams.get("page")) || 1;
-    const totalPerPage = Number(searchParams.get("totalPerPage")) || 2;
+    const totalPerPage = Number(searchParams.get("totalPerPage")) || 10;
 
     const { data, isLoading, isError } = useFetchAnalysis(page, filteringStatus, totalPerPage);
 
@@ -71,28 +71,28 @@ export function RequestAnalysisComponent() {
 
     return (
         <RequestAnalysis.Wrapper>
-            <header className="grid grid-cols-1 lg:grid-cols-2 w-full gap-4">
-                <div className='bg-gray-50 rounded-lg p-2 px-6 flex items-center gap-4 border border-gray-100'>
+            <header className="flex items-center w-full gap-4">
+                <div className="rounded-lg p-2 flex items-center gap-4 w-full">
                     <div
-                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === undefined ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-600'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        className={`w-full flex items-center justify-center cursor-pointer p-2 text-sm font-medium ${filteringStatus === undefined ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-600'} rounded-lg transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
                         onClick={() => handleSetFilteringStatus(undefined)}
                     >
                         <span>Todos (5)</span>
                     </div>
                     <div
-                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'PENDING' ? 'bg-amber-50 text-amber-600 border border-amber-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        className={`w-full flex items-center justify-center cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'PENDING' ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
                         onClick={() => handleSetFilteringStatus('PENDING')}
                     >
                         <span>Pendentes (5)</span>
                     </div>
                     <div
-                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'APPROVED' ? 'bg-emerald-50 text-emerald-600 border border-emerald-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        className={`w-full flex items-center justify-center cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'APPROVED' ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
                         onClick={() => handleSetFilteringStatus('APPROVED')}
                     >
                         <span>Aprovadas (5)</span>
                     </div>
                     <div
-                        className={`cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'DENIED' ? 'bg-red-50 text-red-600 border border-red-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg px-6 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
+                        className={`w-full flex items-center justify-center cursor-pointer p-2 text-sm font-medium ${filteringStatus === 'DENIED' ? 'bg-sky-50 text-sky-600 border border-sky-300 font-medium' : ' bg-gray-50 text-gray-700'} rounded-lg transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow`}
                         onClick={() => handleSetFilteringStatus('DENIED')}
                     >
                         <span>Negadas (5)</span>
@@ -226,6 +226,6 @@ export function RequestAnalysisComponent() {
                     )}
                 </Card>
             </main>
-        </RequestAnalysis.Wrapper>
+        </RequestAnalysis.Wrapper >
     )
 }

@@ -77,7 +77,6 @@ export function DetailComponent({ analysis, onIsSaved, onSetIsSaved }: DetailCom
     }
 
     async function handleOnSubmitUpdate(data: UpdateAnalysisSchema) {
-        console.log(data)
         await mutateAsync(data)
 
         onSetIsSaved(true)
@@ -101,11 +100,11 @@ export function DetailComponent({ analysis, onIsSaved, onSetIsSaved }: DetailCom
                                         <CircleAlert className="text-sky-500" size={15} />
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Todos os problemas acima compartilharão a mesma solução. Para soluções diferentes, crie um novo conhecimento.</p>
+                                        <p>Informe todos os problemas do mesmo contexto que a solução abaixo irá solucionar.</p>
                                     </TooltipContent>
                                 </Tooltip>
 
-                                <span className="text-sm text-gray-800">Problemas<span className="text-red-500">*</span></span>
+                                <span className="text-sm text-gray-800">Problemas<span className="text-red-500"> *</span></span>
                             </div>
                             {analysis.status === 'PENDING' && (
                                 <Tooltip>
