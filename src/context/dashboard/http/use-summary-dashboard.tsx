@@ -17,7 +17,11 @@ export interface SummaryDashboardResponse {
 
 export async function summaryDashboard() {
     const apiUrl = import.meta.env.VITE_API_URL;
-    const res = await fetch(`${apiUrl}/api/v1/dashboard`)
+    const res = await fetch(`${apiUrl}/api/v1/dashboard`, {
+        headers: {
+            'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+        }
+    })
 
     if (!res.ok) {
         throw new Error("Erro ao buscar dashboard")

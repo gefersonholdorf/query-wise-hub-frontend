@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 
 export interface FetchAnalysisResponse {
     data: {
@@ -28,7 +28,11 @@ export function useFetchAnalysis(page: number, status: 'PENDING' | 'APPROVED' | 
             if (status !== undefined) params.append('status', status.toString());
             if (totalPerPage !== undefined) params.append('totalPerPage', totalPerPage.toString());
 
-            const res = await fetch(`${apiUrl}/api/v1/analysis?${params.toString()}`)
+            const res = await fetch(`${apiUrl}/api/v1/analysis?${params.toString()}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            })
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar análises")
@@ -38,5 +42,6 @@ export function useFetchAnalysis(page: number, status: 'PENDING' | 'APPROVED' | 
 
             return response
         },
+        placeholderData: keepPreviousData
     })
 }

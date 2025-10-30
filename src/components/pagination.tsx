@@ -50,7 +50,7 @@ export function PaginationComponent({
         <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-4 border border-gray-200 p-3 rounded-lg bg-white shadow-sm">
             <span className="text-sm text-gray-600">
                 Mostrando{" "}
-                <span className="font-semibold text-gray-800">{pageSize}</span> resultados
+                <span className="font-semibold text-gray-800">{pageSize}</span> de {total} resultados
             </span>
 
             <div className="flex items-center gap-2">
