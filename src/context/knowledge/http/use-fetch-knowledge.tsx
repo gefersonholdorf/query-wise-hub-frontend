@@ -34,7 +34,11 @@ export function useFetchKnowledge({ page, problem, totalPerPage }: PaginationPar
             if (totalPerPage !== undefined) params.append('totalPerPage', totalPerPage.toString());
             if (problem) params.append('problem', problem);
 
-            const res = await fetch(`${apiUrl}/api/v1/knowledges?${params.toString()}`);
+            const res = await fetch(`${apiUrl}/api/v1/knowledges?${params.toString()}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            });
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar conhecimentos");

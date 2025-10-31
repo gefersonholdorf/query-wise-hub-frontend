@@ -19,7 +19,8 @@ export function useConfirmAnalysis(id: number) {
             const res = await fetch(`${apiUrl}/api/v1/analysis/confirm/${id}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
                 },
                 body: JSON.stringify(data)
             })

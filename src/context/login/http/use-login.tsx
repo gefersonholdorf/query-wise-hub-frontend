@@ -1,5 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export interface LoginRequest {
@@ -11,8 +10,6 @@ export interface LoginResponse {
 }
 
 export function useLogin() {
-    const queryClient = useQueryClient();
-    const navigate = useNavigate()
     return useMutation({
         mutationKey: ['login'],
         mutationFn: async (data: LoginRequest) => {
@@ -33,15 +30,22 @@ export function useLogin() {
             return responseData;
         },
         onSuccess: () => {
-            toast.success("Login efetuado com sucesso!", {
-                position: 'top-center'
+            toast.success("Login realizado com sucesso!", {
+                style: {
+                    background: '#4fb353',
+                    color: '#fff',
+                    border: '1px solid #4fb353'
+                },
             })
-
-            navigate('/initial-page')
         },
         onError: () => {
-            toast.error("Erro ao realizar login!", {
-                position: 'top-center'
+            toast.error("Erro ao realizar login. Forneça as credenciais corretas!", {
+                position: 'top-center',
+                style: {
+                    background: '#b30000',
+                    color: '#fff',
+                    border: '1px solid #b30000',
+                },
             })
         }
     })

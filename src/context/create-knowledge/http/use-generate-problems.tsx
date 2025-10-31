@@ -20,7 +20,11 @@ export function useGenerateProblems(context: string) {
                 Contexto atual: ${context}
             `;
             const encodedPrompt = encodeURIComponent(prompt);
-            const res = await fetch(`${apiUrl}/${encodedPrompt}`);
+            const res = await fetch(`${apiUrl}/${encodedPrompt}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            });
 
             if (!res.ok) {
                 throw new Error("Erro ao gerar novos problemas")

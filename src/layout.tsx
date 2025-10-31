@@ -1,8 +1,12 @@
-import { BookOpen, BrainCircuit, ChevronLeft, CircleCheckBig, CircleX, ClipboardList, Cog, Home, LayoutDashboard, Menu, MessageSquareMore, Plus, Users2 } from "lucide-react";
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <"explanation"> */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <"explanation"> */
+import { BookOpen, ChevronLeft, Circle, CircleCheck, CircleUserRound, ClipboardList, Cog, Home, LayoutDashboard, LogOut, Menu, MessageSquareMore, Plus, User, Users2 } from "lucide-react";
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { NavComponent } from "./components/nav/nav-component";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./components/ui/tooltip";
+import { useAuth } from "./context/auth/auth-context";
+import { useLogout } from "./context/login/http/use-logout";
+import { Button } from "./components/ui/button";
 
 export function Layout() {
     const [open, setOpen] = useState(false);
@@ -56,8 +60,8 @@ export function Layout() {
                     <Link to="/users"><NavComponent active={location.pathname === '/users' ? 'select' : 'default'} title="Usuários" icon={<Users2 size={15} />} /></Link>
                     <Link to="/settings"><NavComponent active={location.pathname === '/settings' ? 'select' : 'default'} title="Configurações" icon={<Cog size={15} />} /></Link>
                 </nav>
-                <div>
-                </div>
+                <div></div>
+                <Footer />
             </aside>
 
             {!open && (
@@ -74,9 +78,39 @@ export function Layout() {
 }
 
 export function Footer() {
+    const { signOut, user } = useAuth()
+    const { mutateAsync: logout } = useLogout()
+
+    async function handleLogout() {
+        await logout()
+        signOut()
+    }
+
+    function getRoleLabel(role?: string) {
+        switch (role) {
+            case "ADMIN":
+                return "Administrador"
+            case "COMMON":
+                return "Comum"
+            case "EMPLOYEE":
+                return "Funcionário"
+            default:
+                return "Desconhecido"
+        }
+    }
+
     return (
-        <footer className="w-full py-4 border-t border-gray-200 text-center text-gray-500 text-sm mt-8">
-            © {new Date().getFullYear()} Desenvolvido por Geferson Holdorf
-        </footer>
-    );
+        <div className="flex flex-col border-gray-200 bg-white/60 backdrop-blur-md">
+
+            <div className="px-6 flex gap-2 cursor-pointer hover:text-red-700 p-2" onClick={() => handleLogout()}> <LogOut size={20} className="text-red-500 " /> <span className="text-sm text-red-500">Sair</span> </div>
+
+            <footer className="border-t border-gray-200 text-center text-gray-500 text-[0.75rem] py-4 bg-gray-50/70">
+                © {new Date().getFullYear()} Desenvolvido por{" "}
+                <br />
+                <span className="font-semibold text-gray-700 hover:text-blue-600 transition-colors">
+                    Geferson Holdorf
+                </span>
+            </footer>
+        </div>
+    )
 }

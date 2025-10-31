@@ -16,7 +16,8 @@ export function useUpdateAnalysisById(id: number) {
             const res = await fetch(`${apiUrl}/api/v1/analysis/${id}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
                 },
                 body: JSON.stringify(data)
             })

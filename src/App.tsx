@@ -12,6 +12,7 @@ import { AnalysisDetailPage } from "./pages/analysis-detail";
 import { InitialPage } from "./pages/initial-page";
 import { LoginPage } from "./pages/login";
 import { AuthProvider } from "./context/auth/auth-context";
+import { PrivateRoute } from "./context/auth/private-routes";
 
 const queryClient = new QueryClient()
 
@@ -21,15 +22,17 @@ export function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route element={<Layout />}>
-              <Route path="/knowledge" element={<KnowledgePage />} />
-              <Route path="/create-knowledge" element={<CreateKnowledgePage />} />
-              <Route path="/knowledge/:id" element={<KnowledgeDetailPage />} />
-              <Route path="/analysis" element={<RequestAnalysisPage />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/initial-page" element={<InitialPage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/analysis/:id" element={<AnalysisDetailPage />} />
+            <Route element={<PrivateRoute />}>
+              <Route element={<Layout />}>
+                <Route path="/knowledge" element={<KnowledgePage />} />
+                <Route path="/create-knowledge" element={<CreateKnowledgePage />} />
+                <Route path="/knowledge/:id" element={<KnowledgeDetailPage />} />
+                <Route path="/analysis" element={<RequestAnalysisPage />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/initial-page" element={<InitialPage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+                <Route path="/analysis/:id" element={<AnalysisDetailPage />} />
+              </Route>
             </Route>
             <Route path="/login" element={<LoginPage />} />
           </Routes>

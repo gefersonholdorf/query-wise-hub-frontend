@@ -13,7 +13,11 @@ export function useSummaryAnalysis() {
         queryKey: ['summary-analysis'],
         queryFn: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
-            const res = await fetch(`${apiUrl}/api/v1/analysis/summary`)
+            const res = await fetch(`${apiUrl}/api/v1/analysis/summary`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            })
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar análises")

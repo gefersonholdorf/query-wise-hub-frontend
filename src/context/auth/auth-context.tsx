@@ -1,47 +1,106 @@
-import { createContext, useContext, type ReactNode } from "react";
-import { useMe, type UserResponse } from "./http/use-me";
+/** biome-ignore-all assist/source/organizeImports: <"explanation"> */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <"explanation"> */
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { useNavigate } from "react-router";
 
-interface AuthContextType {
-    user: UserResponse | null;
-    isAuthenticated: boolean;
+export interface User {
+    id: number;
+    email: string;
+    cpf: string;
+    username: string;
+    fileName: string | null;
+    fullName: string;
+    role: "COMMON" | "ADMIN" | "EMPLOYEE";
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    lastLogin: Date;
 }
 
-const AuthContext = createContext<AuthContextType>({
+export interface UserResponse {
+    user: User;
+}
+
+export interface AuthContextProps {
+    user: User | null;
+    isAuthenticated: boolean;
+    signIn: (token: string) => Promise<void>;
+    signOut: () => void;
+}
+
+export const AuthContext = createContext<AuthContextProps>({
     user: null,
     isAuthenticated: false,
+    signIn: async () => { },
+    signOut: () => { },
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const token = localStorage.getItem("token");
+    const [user, setUser] = useState<User | null>(
+        JSON.parse(localStorage.getItem("user") || "null")
+    );
+    const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
-    // só executa a requisição se existir token
-    const { data, isLoading } = useMe({
-        enabled: !!token,
-    });
+    const navigate = useNavigate()
 
-    // Se não há token, nem tenta buscar usuário
-    if (!token) {
-        return (
-            <AuthContext.Provider value={{ user: null, isAuthenticated: false }}>
-                {children}
-            </AuthContext.Provider>
-        );
+    useEffect(() => {
+        const authenticate = async () => {
+            if (!token) {
+                setIsAuthenticated(false);
+                return;
+            }
+
+            if (!user) {
+                try {
+                    const apiUrl = import.meta.env.VITE_API_URL;
+                    const res = await fetch(`${apiUrl}/api/v1/users/me`, {
+                        headers: { authorization: `Bearer ${token}` },
+                    });
+
+                    if (!res.ok) throw new Error("Erro ao buscar dados do usuário.");
+
+                    const response: UserResponse = await res.json();
+                    setUser(response.user);
+                    localStorage.setItem("user", JSON.stringify(response.user));
+                    setIsAuthenticated(true);
+
+                    navigate('/initial-page');
+                } catch (err) {
+                    console.error("Erro na autenticação:", err);
+                    setUser(null);
+                    setIsAuthenticated(false);
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                }
+            } else {
+                setIsAuthenticated(true);
+            }
+        };
+
+        authenticate();
+    }, [token]);
+
+    async function signIn(token: string) {
+        localStorage.setItem("token", token);
+        setToken(token);
     }
 
-    // Exibe um loading básico enquanto busca os dados
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen text-gray-500">
-                Carregando dados do usuário...
-            </div>
-        );
+    function signOut() {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        setUser(null);
+        setToken(null);
+        setIsAuthenticated(false);
     }
 
     return (
         <AuthContext.Provider
             value={{
-                user: data ?? null,
-                isAuthenticated: !!data,
+                user,
+                isAuthenticated,
+                signIn,
+                signOut,
             }}
         >
             {children}

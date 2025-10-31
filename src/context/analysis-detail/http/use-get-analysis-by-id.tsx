@@ -27,7 +27,11 @@ export function useGetAnalysisById(id: number) {
         queryKey: ['analysis-detail', id],
         queryFn: async () => {
             const apiUrl = import.meta.env.VITE_API_URL;
-            const res = await fetch(`${apiUrl}/api/v1/analysis/${id}`)
+            const res = await fetch(`${apiUrl}/api/v1/analysis/${id}`, {
+                headers: {
+                    'authorization': `Bearer ${localStorage.getItem('token') || ''}`
+                }
+            })
 
             if (!res.ok) {
                 throw new Error("Erro ao buscar análises")

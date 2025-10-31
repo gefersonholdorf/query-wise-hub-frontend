@@ -1,9 +1,11 @@
 /** biome-ignore-all assist/source/organizeImports: <"explanation"> */
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "@/context/auth/auth-context";
 import { Plus, Search } from "lucide-react";
 
 export function PresentationComponent() {
+    const { user } = useAuth()
     return (
         <Card className="relative w-full overflow-hidden rounded-xl h-30 flex items-center transition-all duration-300 transform hover:scale-[1.01] hover:shadow-lg shadow">
             <img
@@ -14,7 +16,7 @@ export function PresentationComponent() {
             <div className="absolute inset-0 bg-gradient-to-r from-white/50 to-white/50 flex" />
             <div className="w-full relative z-10 flex flex-1 items-center justify-between px-4">
                 <div className="text-black">
-                    <h1 className="text-2xl font-bold">Bem vindo de volta, Geferson!</h1>
+                    <h1 className="text-2xl font-bold">Bem vindo de volta, {user?.fullName}!</h1>
                     <p className="text-sm text-black/70 mt-1">
                         Explore novas ideias e registre aprendizados valiosos hoje.
                     </p>

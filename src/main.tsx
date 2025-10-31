@@ -8,6 +8,17 @@ import { Toaster } from './components/ui/sonner'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
-    <Toaster richColors />
+    <Toaster
+      position="top-center"
+      toastOptions={{
+        style: {
+          borderRadius: '8px',
+          padding: '12px 16px',
+          fontWeight: 500,
+        },
+        className: 'custom-toast',
+      }}
+      richColors
+    />
   </StrictMode>,
 )
